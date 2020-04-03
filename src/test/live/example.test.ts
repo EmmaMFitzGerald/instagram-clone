@@ -4,7 +4,6 @@ import { table } from "console";
 var AWS = require("aws-sdk");
 import fs = require("fs");
 var path = require('path');
-require("dotenv").config();
 
 describe("Example Test Series", () => {
     it("should return an expected value", () => {
