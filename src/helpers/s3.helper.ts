@@ -11,7 +11,7 @@ export async function s3Helper(originalname: any): Promise<any> {
 
     const uploadParams: AWS.S3.PutObjectRequest = {
         Bucket: "instagram-clone-bucket-emma",
-        Key: "",
+        Key: originalname,
         Body: "",
     };
     const file = originalname;
@@ -23,7 +23,8 @@ export async function s3Helper(originalname: any): Promise<any> {
 
     uploadParams.Body = fileStream;
     uploadParams.Key = path.basename(file);
-    console.log("Uploading to S3")
+
+    console.log("Uploading to S3 key");
     // eslint-disable-next-line func-names
 
     return s3.upload(uploadParams).promise();

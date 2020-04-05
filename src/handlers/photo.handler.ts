@@ -1,6 +1,7 @@
 import { dynamoHelper } from "../helpers/dynamo.helper";
 import { s3Helper } from "../helpers/s3.helper";
 
+// eslint-disable-next-line import/prefer-default-export
 export async function uploadPhoto(
     originalname: any,
     photoId: any,
@@ -17,7 +18,8 @@ export async function uploadPhoto(
             photoId,
             uploadTime,
             userId,
-            bucketName
+            bucketName,
+            pathname
         );
     } catch (err) {
         // handle any error
@@ -31,6 +33,5 @@ export async function uploadPhoto(
     } catch (err) {
         console.error(err);
     }
-
     // return success
 }
