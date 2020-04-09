@@ -5,20 +5,20 @@ export function dynamoHelper(
     originalname: any,
     photoId: string,
     uploadTime: any,
-    userId: any,
+    name: string,
+    userId: string,
     bucketName: string,
     pathname: string,
-    name: string
 ): Promise<any> {
     const params = {
         Item: {
             PhotoID: photoId,
+            Name: name,
             UserID: userId,
             FileName: originalname,
             UploadTime: uploadTime,
             BucketName: bucketName,
             PathName: pathname,
-            Name: name,
         },
         TableName: "PhotoTable",
     };

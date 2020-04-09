@@ -6,10 +6,10 @@ export async function uploadPhoto(
     originalname: any,
     photoId: any,
     uploadTime: any,
+    name: any,
     userId: any,
     bucketName: any,
     pathname: any,
-    name: any
 ): Promise<any> {
     // use dyanmo make the db record
     try {
@@ -17,14 +17,14 @@ export async function uploadPhoto(
             originalname,
             photoId,
             uploadTime,
+            name,
             userId,
             bucketName,
-            pathname,
-            name,
+            pathname
         );
     } catch (err) {
         // handle any error
-        console.error(err);
+        console.error("this is the dynamo error:", err);
         // res.render("../ts-template/views/error", { err });
     }
 
@@ -32,7 +32,7 @@ export async function uploadPhoto(
     try {
         await s3Helper(pathname);
     } catch (err) {
-        console.error(err);
+        console.error("this is the s3 error:", err);
     }
     // return success
 }

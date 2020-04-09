@@ -1,10 +1,13 @@
 import AWS = require("aws-sdk");
 // Gets specific users photos from the db
 // eslint-disable-next-line import/prefer-default-export
-export function getUserPhoto(userId: any): Promise<any> {
+export function getUsersPhoto(userId: any): Promise<any> {
     const params = {
         TableName: "PhotoTable",
-        FilterExpression: "UserID = :userid",
+        FilterExpression: "#Nme = :userid",
+        ExpressionAttributeNames: {
+            "#Nme": "Name",
+        },
         ExpressionAttributeValues: {
             ":userid": userId,
         },
