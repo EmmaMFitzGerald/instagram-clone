@@ -8,21 +8,27 @@ const s3 = new AWS.S3();
 // eslint-disable-next-line import/prefer-default-export
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 // eslint-disable-next-line import/prefer-default-export
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+// eslint-disable-next-line import/prefer-default-export
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function signUrls(userPhotos: any) {
     console.log(userPhotos);
     let photo;
+    const usersPhotoArray = [];
     for (photo of userPhotos) {
+        console.log(photo);
         const myBucket = photo.BucketName;
         const myKey = photo.PathName.slice(8);
         const signedUrlExpireSeconds = 60 * 5;
-        console.log(myBucket, myKey);
 
         const url = s3.getSignedUrl("getObject", {
             Bucket: myBucket,
             Key: myKey,
             Expires: signedUrlExpireSeconds,
         });
-
-        console.log(url);
+        usersPhotoArray.push(url);
     }
+    console.log(usersPhotoArray);
+
+    return usersPhotoArray;
 }

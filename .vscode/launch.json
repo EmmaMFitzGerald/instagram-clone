@@ -10,6 +10,29 @@
             "name": "Launch Server",
             "program": "${workspaceFolder}/dist/index.js",
             "outputCapture": "console",
-        }
+        },
+        {
+            "name": "Test",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "cwd": "${workspaceRoot}/",
+            "stopOnEntry": false,
+            "trace": true,
+            "args": [
+                "-r",
+                "ts-node/register",                
+                "--timeout",
+                "999999",
+                "--colors",
+                "${workspaceFolder}/src/test/live/**/*.test.ts"
+            ],
+            "runtimeArgs": [
+                "--nolazy"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "sourceMaps": true,
+        }        
     ]
 }

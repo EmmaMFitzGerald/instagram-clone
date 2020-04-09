@@ -1,0 +1,28 @@
+body {
+    font-family: 'Concert One', cursive;
+    background-color: #FAEBD7;
+}
+
+.container {
+    width: 90%;
+    margin: 0% auto;
+}
+
+nav {
+    float: right;
+}
+
+nav ul {
+    margin: 0%;
+    padding: 0%;
+    list-style: none;
+}
+
+nav li {
+    display: inline-block;
+    margin-left: 40px;
+}
+
+h1 {
+    margin-right: 100px;
+}

@@ -1,14 +1,15 @@
 import AWS = require("aws-sdk");
 // Gets specific users photos from the db
 // eslint-disable-next-line import/prefer-default-export
-export function getUsersPhoto(userId: any): Promise<any> {
+export function getUsersUsername(userId: any): Promise<any> {
     const params = {
-        TableName: "PhotoTable",
-        FilterExpression: "UserID = :userid",
+        TableName: "UserTable",
+        FilterExpression: "email = :email",
         ExpressionAttributeValues: {
-            ":userid": userId,
+            ":email": userId,
         },
     };
+
 
     const documentClient = new AWS.DynamoDB.DocumentClient({
         region: "us-east-1",

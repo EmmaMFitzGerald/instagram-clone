@@ -23,9 +23,12 @@ export async function s3Helper(originalname: any): Promise<any> {
 
     uploadParams.Body = fileStream;
     uploadParams.Key = path.basename(file);
+    // console.log("key uplaod params", uploadParams.Key);
 
     console.log("Uploading to S3 key");
     // eslint-disable-next-line func-names
 
     return s3.upload(uploadParams).promise();
 }
+
+// 8c25d0725502acdb385f7671a5893616

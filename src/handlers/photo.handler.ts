@@ -9,7 +9,7 @@ export async function uploadPhoto(
     userId: any,
     bucketName: any,
     pathname: any,
-    res: any
+    name: any
 ): Promise<any> {
     // use dyanmo make the db record
     try {
@@ -19,12 +19,13 @@ export async function uploadPhoto(
             uploadTime,
             userId,
             bucketName,
-            pathname
+            pathname,
+            name,
         );
     } catch (err) {
         // handle any error
         console.error(err);
-        res.render("../ts-template/views/error", { err });
+        // res.render("../ts-template/views/error", { err });
     }
 
     // use s3 helper to upload file

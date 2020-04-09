@@ -1,0 +1,4 @@
+<% for (var i = 0; i < allPhotosSignedURLs.length; i++) { %>
+    <img src="<%= allPhotosSignedURLs[i] %>" alt="" height="200px" width="200px">
+    <p><a href="/profile/<%= allPhotos.Items[i].Name %>"><%= allPhotos.Items[i].Name %></a></p>
+<% } %>
