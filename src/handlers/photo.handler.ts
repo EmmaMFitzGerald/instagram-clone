@@ -9,7 +9,7 @@ export async function uploadPhoto(
     name: any,
     userId: any,
     bucketName: any,
-    pathname: any,
+    pathname: any
 ): Promise<any> {
     // use dyanmo make the db record
     try {

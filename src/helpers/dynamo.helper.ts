@@ -8,7 +8,7 @@ export function dynamoHelper(
     name: string,
     userId: string,
     bucketName: string,
-    pathname: string,
+    pathname: string
 ): Promise<any> {
     const params = {
         Item: {

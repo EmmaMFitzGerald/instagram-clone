@@ -8,7 +8,7 @@ import * as AWS from "aws-sdk";
 // global.fetch = require("node-fetch");
 
 // eslint-disable-next-line import/prefer-default-export
-export function signUpUsers(email: any, password: any, name:any) {
+export function signUpUsers(email: any, password: any, name: any) {
     const params = {
         ClientId: "t0bkh3s2iu50nlj1hdpovqjq9" /* required */,
         Password: password /* required */,

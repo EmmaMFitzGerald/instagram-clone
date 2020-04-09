@@ -12,7 +12,7 @@ const s3 = new AWS.S3();
 // eslint-disable-next-line import/prefer-default-export
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function signUrls(userPhotos: any) {
-    console.log(userPhotos);
+    console.log("this is from signUrls method. userPhotos:", userPhotos);
     let photo;
     const usersPhotoArray = [];
     for (photo of userPhotos) {

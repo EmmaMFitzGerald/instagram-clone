@@ -1,10 +1,7 @@
 <%- include('partials/signout')%>
 
 <h1>This is <%= id %>'s Page</h1>
-<form method="post" action="/follow">
-    <input type="hidden" name="userToFollow" value="<%= id %>"/>
-    <input type="submit" value="Follow">
-</form>
+
 
 
 <% for (var i = 0; i < usersSignedURLs.length; i++) { %>
