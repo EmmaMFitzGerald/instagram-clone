@@ -10,8 +10,8 @@ export function followUser(
         Item: {
             // eslint-disable-next-line object-shorthand
             userName: userName,
-            following: following,
-            email: email,
+            following,
+            email,
         },
         TableName: "UserTable",
     };

@@ -17,6 +17,9 @@ import { followUser } from "./helpers/follow.user";
 import { getListOfPeopleYouFollow } from "./helpers/get.following.from.db";
 import { getUsersYouFollowsPhotos } from "./helpers/get.users.you.follows.photos";
 import { signUrlsOfUsersYouFollow } from "./helpers/sign.users.you.follows.photos";
+import { getAllUsers } from "./helpers/get.all.users.helper";
+import { getArrayOfAllUsers } from "./helpers/get.array.of.all.users";
+import { profileToDisplay } from "./helpers/profile.to.display.helper";
 // import methodOverride = require("method-override");
 const app = express();
 app.use(express.static(`${__dirname}/public`));
@@ -90,12 +93,23 @@ app.get("/signout", (req, res) => {
 // });
 
 app.get("/profile/:id", async (req, res) => {
+    const allUsers = await getAllUsers();
+    const arrayOfAllUsers = getArrayOfAllUsers(allUsers);
     const { id } = req.params;
-    if (req.session.userName === id) {
+
+    // profileToDisplay(arrayOfAllUsers, id, req.session.userName, res);
+
+    const doesThisUserExist = arrayOfAllUsers.includes(id)
+
+    if (doesThisUserExist === true && req.session.userName === id){
         const usersPhotos = await getUsersPhoto(req.session.userName);
         const usersSignedURLs = signUrls(usersPhotos.Items);
-        res.render("profile", { usersPhotos, userName: req.session.userName, usersSignedURLs });
-    } else {
+        res.render("profile", {
+            usersPhotos,
+            userName: req.session.userName,
+            usersSignedURLs,
+        });
+    } else if (doesThisUserExist === true && req.session.userName !== id) {
         const specificUsersPhotos = await getUsersPhoto(id);
         const usersSignedURLs = signUrls(specificUsersPhotos.Items);
         res.render("specificProfile", {
@@ -103,6 +117,8 @@ app.get("/profile/:id", async (req, res) => {
             id,
             usersSignedURLs,
         });
+    } else {
+        res.render("profileDoesntExist");
     }
 });
 
