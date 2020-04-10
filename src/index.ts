@@ -60,7 +60,6 @@ app.get("/explorepage", async (req, res) => {
     const allPhotos = await getAllPhotos();
     const allPhotosSignedURLs = signUrls(allPhotos.Items);
     const name = await queryUsersTable(req.session.userId);
-    console.log("req.session.userId:", req.session.userId);
     const { userName } = name.Items[0];
     res.render("explorepage", { allPhotosSignedURLs, allPhotos, userName });
 });
@@ -71,14 +70,31 @@ app.get("/signout", (req, res) => {
     res.render("index");
 });
 
+// app.get("/profile/:id", async (req, res) => {
+//     const name = await queryUsersTable(req.session.userId);
+//     const currentUser = name.Items[0].userName;
+//     const { id } = req.params;
+//     if (currentUser === id) {
+//         const usersPhotos = await getUsersPhoto(currentUser);
+//         const usersSignedURLs = signUrls(usersPhotos.Items);
+//         res.render("profile", { usersPhotos, userName: req.session.userName, usersSignedURLs });
+//     } else {
+//         const specificUsersPhotos = await getUsersPhoto(id);
+//         const usersSignedURLs = signUrls(specificUsersPhotos.Items);
+//         res.render("specificProfile", {
+//             specificUsersPhotos,
+//             id,
+//             usersSignedURLs,
+//         });
+//     }
+// });
+
 app.get("/profile/:id", async (req, res) => {
-    const name = await queryUsersTable(req.session.userId);
-    const currentUser = name.Items[0].userName;
     const { id } = req.params;
-    if (currentUser === id) {
-        const usersPhotos = await getUsersPhoto(currentUser);
+    if (req.session.userName === id) {
+        const usersPhotos = await getUsersPhoto(req.session.userName);
         const usersSignedURLs = signUrls(usersPhotos.Items);
-        res.render("profile", { usersPhotos, currentUser, usersSignedURLs });
+        res.render("profile", { usersPhotos, userName: req.session.userName, usersSignedURLs });
     } else {
         const specificUsersPhotos = await getUsersPhoto(id);
         const usersSignedURLs = signUrls(specificUsersPhotos.Items);
@@ -104,6 +120,7 @@ app.post("/signup", async (req, res) => {
     req.session.name = name;
     signUpUsers(email, password, name);
     await createUsername(email, name);
+    req.session.userName = name;
     res.redirect("explorePage");
 });
 
@@ -112,6 +129,8 @@ app.post("/signin", async (req, res) => {
     const accessTokenData = await signInUser(email, password);
     req.session.accessToken = accessTokenData.AuthenticationResult.AccessToken;
     req.session.userId = email;
+    const loggedInUsersInformation = await queryUsersTable(email);
+    req.session.userName = loggedInUsersInformation.Items[0].userName;
     res.redirect("explorePage");
 });
 
