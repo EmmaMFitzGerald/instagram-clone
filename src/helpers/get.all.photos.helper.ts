@@ -1,5 +1,5 @@
 import AWS = require("aws-sdk");
-
+// GETS ALL PHOTOS FROM DB
 // eslint-disable-next-line import/prefer-default-export
 export function getAllPhotos(): Promise<any> {
     const params = {

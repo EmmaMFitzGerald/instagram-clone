@@ -19,7 +19,11 @@ import { getUsersYouFollowsPhotos } from "./helpers/get.users.you.follows.photos
 import { signUrlsOfUsersYouFollow } from "./helpers/sign.users.you.follows.photos";
 import { getAllUsers } from "./helpers/get.all.users.helper";
 import { getArrayOfAllUsers } from "./helpers/get.array.of.all.users";
-import { profileToDisplay } from "./helpers/profile.to.display.helper";
+import { deletePhotoHelper } from "./helpers/delete.photo.helper";
+import { getListOfFollowers } from "./helpers/get.list.of.followers";
+import { unfollowUser } from "./helpers/unfollow.user";
+import { getListFollowers } from "./helpers/list.of.followers";
+import { getProfilePageHandler } from "./handlers/getProfilePageHandler";
 // import methodOverride = require("method-override");
 const app = express();
 app.use(express.static(`${__dirname}/public`));
@@ -48,23 +52,56 @@ app.get("/signin", (req, res) => {
     res.render("signin");
 });
 
+app.post("/delete", (req, res) => {
+    deletePhotoHelper(req.body.photoId, req.session.userId);
+    res.redirect("back");
+});
+
+app.post("/unfollow", (req, res) => {
+    unfollowUser(req.session.userName, req.body.userToUnfollow);
+    res.redirect("back");
+});
+
 app.get("/following", async (req, res) => {
     const currentUser = req.session.userId;
     const arrayOfPeopleYouFollow = await queryUsersTable(currentUser);
     const peopleYouFollow = arrayOfPeopleYouFollow.Items;
     const listOfPeopleYouFollow = getListOfPeopleYouFollow(peopleYouFollow);
     const list = await getUsersYouFollowsPhotos(listOfPeopleYouFollow);
-    console.log("list of people you follow", list);
     const listOfSignedUrls = signUrlsOfUsersYouFollow(list);
-    res.render("peopleYouFollow", { listOfSignedUrls, list });
+    res.render("peopleYouFollow", {
+        listOfSignedUrls,
+        list,
+        userName: req.session.userName,
+        arrayOfFollowers: req.session.followers,
+    });
 });
 
-app.get("/explorepage", async (req, res) => {
+app.get("/followers", async (req, res) => {
+    const listOfFollowers = await getListOfFollowers(req.session.userName);
+    const arrayOfFollowers = getListFollowers(listOfFollowers);
+    res.render("followers", {
+        arrayOfFollowers,
+        userName: req.session.userName,
+    });
+});
+
+app.get("/explore", async (req, res) => {
     const allPhotos = await getAllPhotos();
     const allPhotosSignedURLs = signUrls(allPhotos.Items);
-    const name = await queryUsersTable(req.session.userId);
-    const { userName } = name.Items[0];
-    res.render("explorepage", { allPhotosSignedURLs, allPhotos, userName });
+    // const name = await queryUsersTable(req.session.userId);
+    // const { userName } = name.Items[0];
+    const { userName } = req.session;
+    console.log("explore username:", userName);
+    const listOfFollowers = await getListOfFollowers(userName);
+    const arrayOfFollowers = getListFollowers(listOfFollowers);
+    req.session.followers = arrayOfFollowers;
+    res.render("explore", {
+        allPhotosSignedURLs,
+        allPhotos,
+        userName,
+        arrayOfFollowers,
+    });
 });
 
 app.get("/signout", (req, res) => {
@@ -73,53 +110,22 @@ app.get("/signout", (req, res) => {
     res.render("index");
 });
 
-// app.get("/profile/:id", async (req, res) => {
-//     const name = await queryUsersTable(req.session.userId);
-//     const currentUser = name.Items[0].userName;
-//     const { id } = req.params;
-//     if (currentUser === id) {
-//         const usersPhotos = await getUsersPhoto(currentUser);
-//         const usersSignedURLs = signUrls(usersPhotos.Items);
-//         res.render("profile", { usersPhotos, userName: req.session.userName, usersSignedURLs });
-//     } else {
-//         const specificUsersPhotos = await getUsersPhoto(id);
-//         const usersSignedURLs = signUrls(specificUsersPhotos.Items);
-//         res.render("specificProfile", {
-//             specificUsersPhotos,
-//             id,
-//             usersSignedURLs,
-//         });
-//     }
-// });
-
 app.get("/profile/:id", async (req, res) => {
     const allUsers = await getAllUsers();
-    const arrayOfAllUsers = getArrayOfAllUsers(allUsers);
     const { id } = req.params;
-
-    // profileToDisplay(arrayOfAllUsers, id, req.session.userName, res);
-
-    const doesThisUserExist = arrayOfAllUsers.includes(id)
-
-    if (doesThisUserExist === true && req.session.userName === id){
-        const usersPhotos = await getUsersPhoto(req.session.userName);
-        const usersSignedURLs = signUrls(usersPhotos.Items);
-        res.render("profile", {
-            usersPhotos,
-            userName: req.session.userName,
-            usersSignedURLs,
-        });
-    } else if (doesThisUserExist === true && req.session.userName !== id) {
-        const specificUsersPhotos = await getUsersPhoto(id);
-        const usersSignedURLs = signUrls(specificUsersPhotos.Items);
-        res.render("specificProfile", {
-            specificUsersPhotos,
-            id,
-            usersSignedURLs,
-        });
-    } else {
-        res.render("profileDoesntExist");
-    }
+    const { userName } = req.session;
+    const arrayOfAllUsers = getArrayOfAllUsers(allUsers);
+    const doesThisUserExist = arrayOfAllUsers.includes(id);
+    const email = req.session.userId;
+    const arrayOfFollowers = req.session.followers;
+    await getProfilePageHandler(
+        arrayOfFollowers,
+        id,
+        email,
+        userName,
+        doesThisUserExist,
+        res
+    );
 });
 
 app.post("/follow", async (req, res) => {
@@ -128,26 +134,41 @@ app.post("/follow", async (req, res) => {
     const name = await queryUsersTable(email);
     const { userName } = name.Items[0];
     await followUser(userName, following, email);
-    res.redirect("explorePage");
+    res.redirect("back");
 });
 
 app.post("/signup", async (req, res) => {
     const { name, email, password } = req.body;
-    req.session.name = name;
     signUpUsers(email, password, name);
-    await createUsername(email, name);
-    req.session.userName = name;
-    res.redirect("explorePage");
+    await createUsername(email, name.toLowerCase());
+    req.session.userName = name.toLowerCase();
+    console.log(
+        "req.session.userName",
+        req.session.userName,
+        "name",
+        name,
+        "email",
+        email,
+        "password",
+        password
+    );
+    res.redirect("explore");
+});
+
+app.post("/search", (req, res) => {
+    console.log("search req.body", req.body);
+    res.redirect(`profile/${req.body.search}`);
 });
 
 app.post("/signin", async (req, res) => {
+    console.log("sign in req:", req);
     const { email, password } = req.body;
     const accessTokenData = await signInUser(email, password);
     req.session.accessToken = accessTokenData.AuthenticationResult.AccessToken;
     req.session.userId = email;
     const loggedInUsersInformation = await queryUsersTable(email);
-    req.session.userName = loggedInUsersInformation.Items[0].userName;
-    res.redirect("explorePage");
+    req.session.userName = loggedInUsersInformation.Items[0].userName.toLowerCase();
+    res.redirect("explore");
 });
 
 app.post("/upload", upload.single("file"), async (req, res) => {
@@ -168,7 +189,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         bucketName,
         pathname
     );
-    console.log("here");
+    res.redirect("back");
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

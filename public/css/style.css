@@ -1,28 +1,40 @@
 body {
     font-family: 'Concert One', cursive;
     background-color: #FAEBD7;
+    margin: 10px;
 }
 
-.container {
-    width: 90%;
-    margin: 0% auto;
+ul{
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+  }
+
+a {
+    text-decoration: none;
 }
 
 nav {
+    width: 100vw;
     float: right;
-}
-
-nav ul {
-    margin: 0%;
-    padding: 0%;
-    list-style: none;
-}
-
-nav li {
-    display: inline-block;
-    margin-left: 40px;
-}
+  }
 
 h1 {
     margin-right: 100px;
+}
+
+img {
+    border-width: 8px black;
+}
+
+.container #signinform {
+    text-align: center;
+
+}
+
+ul li {
+    display: inline-block;
+    padding: 20px;
+    margin: 0 2vw;
 }

@@ -1,4 +1,6 @@
 // eslint-disable-next-line import/prefer-default-export
+
+// eslint-disable-next-line import/prefer-default-export
 export function getListOfPeopleYouFollow(peopleYouFollow: any): any {
     const listOfPeopleYouFollow = [];
 

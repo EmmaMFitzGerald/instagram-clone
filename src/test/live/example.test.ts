@@ -1,75 +1,154 @@
-/* eslint-disable func-names */
-import { describe, it } from "mocha";
-import { expect } from "chai";
-// import { table } from "console";
-import * as AWS from "aws-sdk";
-import * as fs from "fs";
-import * as path from "path";
-import * as AmazonCognitoIdentity from "amazon-cognito-identity-js";
+// /* eslint-disable func-names */
+// import { describe, it } from "mocha";
+// import { expect } from "chai";
+// // import { table } from "console";
+// import * as AWS from "aws-sdk";
+// import * as fs from "fs";
+// import * as path from "path";
+// import * as AmazonCognitoIdentity from "amazon-cognito-identity-js";
 
-describe("Example Test Series", () => {
-    it("should return an expected value", () => {
-        const x = 1;
-        const y = 10;
-        const target = x + y;
+// describe("Example Test Series", () => {
+// it("should return an expected value", () => {
+//     const x = 1;
+//     const y = 10;
+//     const target = x + y;
 
-        expect(target).to.equal(11);
-    });
+//     expect(target).to.equal(11);
+// });
 
-    it("should upload a photo to S3", async function(done) {
-        AWS.config.update({ region: "us-east-1" });
+//     it("should query userstable for list of following", done => {
+//         const params = {
+//             TableName: "usertable",
+//             FilterExpression: "following = :following",
+//             ExpressionAttributeValues: {
+//                 ":following": "Sophie",
+//             },
+//         };
 
-        const s3 = new AWS.S3({ apiVersion: "2006-03-01" });
+//         const documentClient = new AWS.DynamoDB.DocumentClient({
+//             region: "us-east-1",
+//         });
 
-        const uploadParams: AWS.S3.PutObjectRequest = {
-            Bucket: "instagram-clone-bucket-emma",
-            Key: "",
-            Body: "",
-        };
-        const file =
-            "/Users/emmafitzgerald/instagram-clone/ts-template/src/test/live/Kids-Surf.jpg";
+//         documentClient.scan(params, function(err: any, data: any) {
+//             if (err) {
+//                 console.error(
+//                     "Unable to get item",
+//                     console.log(err)
+//                 );
+//             } else {
+//                 console.log(data)
+//             }
+//             done()
+//         });
+// })});
 
-        const fileStream = fs.createReadStream(file);
-        fileStream.on("error", function(err: any) {
-            console.log("File Error", err);
-        });
-        uploadParams.Body = fileStream;
+// it("should upload a photo to S3", async function(done) {
+//     AWS.config.update({ region: "us-east-1" });
 
-        uploadParams.Key = path.basename(file);
+//     const s3 = new AWS.S3({ apiVersion: "2006-03-01" });
 
-        // eslint-disable-next-line func-names
-        s3.upload(uploadParams, function(err: any, data: { Location: any }) {
-            if (err) {
-                console.log("Error", err);
-            }
-            if (data) {
-                console.log("Upload Success", data.Location);
-            }
-        });
+//     const uploadParams: AWS.S3.PutObjectRequest = {
+//         Bucket: "instagram-clone-bucket-emma",
+//         Key: "",
+//         Body: "",
+//     };
+//     const file =
+//         "/Users/emmafitzgerald/instagram-clone/ts-template/src/test/live/Kids-Surf.jpg";
 
-        done();
-    });
+//     const fileStream = fs.createReadStream(file);
+//     fileStream.on("error", function(err: any) {
+//         console.log("File Error", err);
+//     });
+//     uploadParams.Body = fileStream;
 
-    it("should get users username from the db", function(done) {
-        const params = {
-            TableName: "UserTable",
-            FilterExpression: "email = :email",
-            ExpressionAttributeValues: {
-                ":email": "emmamariafitzgerald@gmail.com",
-            },
-        };
+//     uploadParams.Key = path.basename(file);
 
-        const documentClient = new AWS.DynamoDB.DocumentClient({
-            region: "us-east-1",
-        });
+//     // eslint-disable-next-line func-names
+//     s3.upload(uploadParams, function(err: any, data: { Location: any }) {
+//         if (err) {
+//             console.log("Error", err);
+//         }
+//         if (data) {
+//             console.log("Upload Success", data.Location);
+//         }
+//     });
 
-        documentClient.scan(params, function(err: any, data: any) {
-            console.log("this is the users username:", data.Items[0].userName);
-            console.log(data);
-        });
-    });
-});
+//     done();
+// });
 
+// it("should get users username from the db", function(done) {
+//     const params = {
+//         TableName: "UserTable",
+//         FilterExpression: "email = :email",
+//         ExpressionAttributeValues: {
+//             ":email": "emmamariafitzgerald@gmail.com",
+//         },
+//     };
+
+//     const documentClient = new AWS.DynamoDB.DocumentClient({
+//         region: "us-east-1",
+//     //     });
+
+//     //     documentClient.scan(params, function(err: any, data: any) {
+//     //         console.log("this is the users username:", data.Items[0].userName);
+//     //         console.log(data);
+//     //     });
+//     // });
+
+//     it("should delete photo from the db", function(done) {
+//     const params = {
+//         TableName: "PhotoTable",
+//         Key: {
+//             "PhotoID": "1wp151d10k8supe6a",
+//             "UserID": "emmamariafitzgerald@gmail.com"
+//         }
+//     };
+
+//     console.log("Attempting a conditional delete...");
+
+//     const documentClient = new AWS.DynamoDB.DocumentClient({
+//         region: "us-east-1",
+//     });
+
+//     documentClient.delete(params, function(err: any, data: any) {
+//         if (err) {
+//             console.error(
+//                 "Unable to delete item. Error JSON:",
+//                 JSON.stringify(err, null, 2)
+//             );
+//         } else {
+//             console.log("DeleteItem succeeded:", JSON.stringify(data, null, 2));
+//         }
+//     });
+//     });
+// });
+// it("should delete a relationship from the users table", function(done) {
+//     const params = {
+//         TableName: "UserTable",
+//         Key: {
+//             userName: "Emma",
+//             following: "Sophie",
+//         },
+//     };
+
+//     console.log("Attempting a conditional delete...");
+
+//     const documentClient = new AWS.DynamoDB.DocumentClient({
+//         region: "us-east-1",
+//     });
+
+//     documentClient.delete(params, function(err: any, data: any) {
+//         if (err) {
+//             console.error(
+//                 "Unable to delete item. Error JSON:",
+//                 JSON.stringify(err, null, 2)
+//             );
+//         } else {
+//             console.log("DeleteItem succeeded:", JSON.stringify(data, null, 2));
+//         }
+//     });
+// }
+// )});
 //     // eslint-disable-next-line func-names
 //     it("should create item in the database", function(done) {
 //         const params = {

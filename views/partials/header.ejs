@@ -1,13 +1,19 @@
-  <!-- <link href="css/style.css" rel="stylesheet" type="text/css">
+  <link href="../css/style.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css2?family=Concert+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <body>
     <div class="container">
       <nav>
           <ul>
               <% if (userName) { %>
-              <li>Welcome <%= userName %></li>
-              <li><a href="/followers">Followers</a></li>
+              <li>You are signed in as <a href="/profile/<%=userName%>"><%= userName %></a></li>
               <li><a href="/following">Following</a></li>
+              <li><a href="/followers"><%= arrayOfFollowers.length %> Followers</a></li>
+              <form method="post" action="/search">
+                <input type="text" placeholder="Search for Users" name="search">
+                <button type="submit"><i class="fa fa-search"></i></button>
+              </form>
+              <li><a href="/explore">Explore</a></li>
               <li><a href="/signout">Sign Out</a></li>
                 <% } else { %>
               <li><a href="/signup">Sign Up</a></li>
@@ -16,4 +22,4 @@
           </ul>
         </nav>
     </div>
-  </body> -->
+  </body>

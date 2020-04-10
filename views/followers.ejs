@@ -1,0 +1,5 @@
+<%- include('partials/header', { userName })%>
+
+<% for (let i = 0, l = arrayOfFollowers.length; i < l; i++) { %>
+    <p><%= arrayOfFollowers[i] %></p>
+<% } %>

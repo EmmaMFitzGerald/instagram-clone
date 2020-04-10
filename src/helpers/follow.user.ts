@@ -8,8 +8,7 @@ export function followUser(
 ): Promise<any> {
     const params = {
         Item: {
-            // eslint-disable-next-line object-shorthand
-            userName: userName,
+            userName,
             following,
             email,
         },

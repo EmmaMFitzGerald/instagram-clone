@@ -2,13 +2,14 @@
 import AWS = require("aws-sdk");
 // // eslint-disable-next-line import/prefer-default-export
 // eslint-disable-next-line import/prefer-default-export
-export function deletePhotoHelper(photoId: any, userId: any) {
-    console.log("photoid", photoId, "userid", userId);
+export function unfollowUser(currentUser: any, userToUnfollow: any) {
+    console.log("currentUser", currentUser);
+    console.log("userToUnfollow", userToUnfollow);
     const params = {
-        TableName: "PhotoTable",
+        TableName: "UserTable",
         Key: {
-            PhotoID: photoId,
-            UserID: userId,
+            userName: currentUser,
+            following: userToUnfollow,
         },
     };
 

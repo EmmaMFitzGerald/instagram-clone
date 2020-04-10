@@ -11,6 +11,7 @@ const s3 = new AWS.S3();
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 // eslint-disable-next-line import/prefer-default-export
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+// eslint-disable-next-line import/prefer-default-export
 export function signUrls(userPhotos: any) {
     console.log(userPhotos);
     let photo;

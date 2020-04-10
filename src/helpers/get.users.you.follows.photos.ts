@@ -1,6 +1,4 @@
 /* eslint-disable import/prefer-default-export */
-import { queryUserPhotos } from "../handlers/getUsersPhoto.handler";
-import { signUrls } from "./signed.url.helper";
 import { getUsersPhoto } from "./profile.query.dynamo.helper";
 
 export async function getUsersYouFollowsPhotos(

@@ -1,11 +1,18 @@
-<%- include('partials/signout')%>
+<%- include('partials/header', { userName })%>
 
 <h1>This is <%= id %>'s Page</h1>
-<form method="post" action="/follow">
-    <input type="hidden" name="userToFollow" value="<%= id %>"/>
-    <input type="submit" value="Follow">
-</form>
-
+<% if (doesCurrentUserFollowThisProfile === true) { %>
+    <p>You follow <%= id %> </p>
+    <form method="post" action="/unfollow">
+        <input type="hidden" name="userToUnfollow" value="<%= id %>">
+        <input type="submit" value="Unfollow">
+    </form>
+<% } else { %>
+    <form method="post" action="/follow">
+        <input type="hidden" name="userToFollow" value="<%= id %>"/>
+        <input type="submit" value="Follow">
+    </form>
+<% } %>
 
 <% for (var i = 0; i < usersSignedURLs.length; i++) { %>
     <img src="<%= usersSignedURLs[i] %>" alt="" height="200px" width="200px">

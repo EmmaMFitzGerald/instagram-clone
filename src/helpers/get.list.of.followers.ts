@@ -1,12 +1,13 @@
 import AWS = require("aws-sdk");
-// Gets specific users photos from the db
+
 // eslint-disable-next-line import/prefer-default-export
-export function queryUsersTable(userId: any): Promise<any> {
+export function getListOfFollowers(userId: any): Promise<any> {
+    console.log("list of followers user id", userId);
     const params = {
         TableName: "UserTable",
-        FilterExpression: "email = :email",
+        FilterExpression: "following = :following",
         ExpressionAttributeValues: {
-            ":email": userId,
+            ":following": userId,
         },
     };
 

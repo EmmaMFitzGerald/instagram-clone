@@ -1,5 +1,5 @@
 import AWS = require("aws-sdk");
-
+// GETS A LIST OF OBJECTS WITH ALL USERS INFORMATION
 // eslint-disable-next-line import/prefer-default-export
 export function getAllUsers(): Promise<any> {
     const params = {

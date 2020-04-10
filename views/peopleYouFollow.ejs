@@ -1,3 +1,5 @@
+<%- include('partials/header', { userName, arrayOfFollowers })%>
+
 <h1>People you follow</h1>
 <% for (var i = 0; i < listOfSignedUrls.length; i++) { %>
     <img src="<%= listOfSignedUrls[i] %>" alt="" height="200px" width="200px">
