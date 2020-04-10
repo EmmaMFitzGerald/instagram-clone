@@ -24,6 +24,7 @@ import { getListOfFollowers } from "./helpers/get.list.of.followers";
 import { unfollowUser } from "./helpers/unfollow.user";
 import { getListFollowers } from "./helpers/list.of.followers";
 import { getProfilePageHandler } from "./handlers/getProfilePageHandler";
+import { sortPhotosByDate } from "./helpers/sort.photos.helper";
 // import methodOverride = require("method-override");
 const app = express();
 app.use(express.static(`${__dirname}/public`));
@@ -88,11 +89,9 @@ app.get("/followers", async (req, res) => {
 
 app.get("/explore", async (req, res) => {
     const allPhotos = await getAllPhotos();
-    const allPhotosSignedURLs = signUrls(allPhotos.Items);
-    // const name = await queryUsersTable(req.session.userId);
-    // const { userName } = name.Items[0];
+    const sortedPhotos = sortPhotosByDate(allPhotos);
+    const allPhotosSignedURLs = signUrls(sortedPhotos);
     const { userName } = req.session;
-    console.log("explore username:", userName);
     const listOfFollowers = await getListOfFollowers(userName);
     const arrayOfFollowers = getListFollowers(listOfFollowers);
     req.session.followers = arrayOfFollowers;
@@ -142,16 +141,6 @@ app.post("/signup", async (req, res) => {
     signUpUsers(email, password, name);
     await createUsername(email, name.toLowerCase());
     req.session.userName = name.toLowerCase();
-    console.log(
-        "req.session.userName",
-        req.session.userName,
-        "name",
-        name,
-        "email",
-        email,
-        "password",
-        password
-    );
     res.redirect("explore");
 });
 
@@ -175,7 +164,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
     console.log("in the upload route");
     const { originalname } = req.file;
     const pathname = req.file.path;
-    const uploadTime = new Date();
+    const uploadTime = new Date().valueOf();
     const photoId = uniqid();
     const bucketName = "instagram-clone-bucket-emma";
     const name = req.body.currentUser;

@@ -23,16 +23,11 @@ export async function uploadPhoto(
             pathname
         );
     } catch (err) {
-        // handle any error
         console.error("this is the dynamo error:", err);
-        // res.render("../ts-template/views/error", { err });
     }
-
-    // use s3 helper to upload file
     try {
         await s3Helper(pathname);
     } catch (err) {
         console.error("this is the s3 error:", err);
     }
-    // return success
 }

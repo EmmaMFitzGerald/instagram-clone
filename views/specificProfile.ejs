@@ -14,8 +14,12 @@
     </form>
 <% } %>
 
-<% for (var i = 0; i < usersSignedURLs.length; i++) { %>
-    <img src="<%= usersSignedURLs[i] %>" alt="" height="200px" width="200px">
+<% if (usersSignedURLs.length === 0) { %> 
+    <p><%= id %> doesn't have any photos yet!</p>
+<% } else { %> 
+    <% for (var i = 0; i < usersSignedURLs.length; i++) { %>
+        <img src="<%= usersSignedURLs[i] %>" alt="" height="200px" width="200px">
+    <% } %>
 <% } %>
 
 </body>
