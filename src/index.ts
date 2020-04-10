@@ -1,7 +1,5 @@
 import * as express from "express";
 import * as path from "path";
-import Amplify, { Auth } from "aws-amplify";
-import * as AmazonCognitoIdentity from "amazon-cognito-identity-js";
 import * as session from "express-session";
 // import timestamp = require("time-stamp");
 // eslint-disable-next-line import/named
@@ -18,6 +16,7 @@ import { getUsersPhoto } from "./helpers/profile.query.dynamo.helper";
 import { followUser } from "./helpers/follow.user";
 import { getListOfPeopleYouFollow } from "./helpers/get.following.from.db";
 import { getUsersYouFollowsPhotos } from "./helpers/get.users.you.follows.photos";
+import { signUrlsOfUsersYouFollow } from "./helpers/sign.users.you.follows.photos";
 // import methodOverride = require("method-override");
 const app = express();
 app.use(express.static(`${__dirname}/public`));
@@ -51,18 +50,19 @@ app.get("/following", async (req, res) => {
     const arrayOfPeopleYouFollow = await queryUsersTable(currentUser);
     const peopleYouFollow = arrayOfPeopleYouFollow.Items;
     const listOfPeopleYouFollow = getListOfPeopleYouFollow(peopleYouFollow);
-
     const list = await getUsersYouFollowsPhotos(listOfPeopleYouFollow);
-    console.log("following list:", list)
+    console.log("list of people you follow", list);
+    const listOfSignedUrls = signUrlsOfUsersYouFollow(list);
+    res.render("peopleYouFollow", { listOfSignedUrls, list });
 });
 
 app.get("/explorepage", async (req, res) => {
     const allPhotos = await getAllPhotos();
     const allPhotosSignedURLs = signUrls(allPhotos.Items);
     const name = await queryUsersTable(req.session.userId);
-    console.log("req.session.userId:", req.session.userId)
+    console.log("req.session.userId:", req.session.userId);
     const { userName } = name.Items[0];
-    res.render("explorepage", { allPhotosSignedURLs, allPhotos , userName });
+    res.render("explorepage", { allPhotosSignedURLs, allPhotos, userName });
 });
 
 app.get("/signout", (req, res) => {
@@ -114,7 +114,6 @@ app.post("/signin", async (req, res) => {
     req.session.userId = email;
     res.redirect("explorePage");
 });
-
 
 app.post("/upload", upload.single("file"), async (req, res) => {
     console.log("in the upload route");

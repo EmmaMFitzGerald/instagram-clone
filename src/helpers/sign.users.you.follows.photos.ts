@@ -11,14 +11,13 @@ const s3 = new AWS.S3();
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 // eslint-disable-next-line import/prefer-default-export
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function signUrls(userPhotos: any) {
-    console.log(userPhotos);
-    let photo;
+// eslint-disable-next-line import/prefer-default-export
+export function signUrlsOfUsersYouFollow(userPhotos: any) {
     const usersPhotoArray = [];
-    for (photo of userPhotos) {
-        console.log(photo);
-        const myBucket = photo.BucketName;
-        const myKey = photo.PathName.slice(8);
+
+    for (let i = 0, l = userPhotos.length; i < l; i++) {
+        const myBucket = userPhotos[i].Items[0].BucketName;
+        const myKey = userPhotos[i].Items[0].PathName.slice(8);
         const signedUrlExpireSeconds = 60 * 5;
 
         const url = s3.getSignedUrl("getObject", {

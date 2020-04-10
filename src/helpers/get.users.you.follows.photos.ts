@@ -13,11 +13,5 @@ export async function getUsersYouFollowsPhotos(
         listOfUsersYouFollowsPhoto.push(await getUsersPhoto(arrayOfUsers[i]));
     }
 
-
     return listOfUsersYouFollowsPhoto;
-    // const signedUrls = await signUrls(listOfUsersYouFollowsPhoto);
-
-    // console.log("signedUrls inside getUserFollowsPhotos", signedUrls);
-
-    // return signedUrls;
 }
