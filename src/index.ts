@@ -59,7 +59,19 @@ app.post("/delete", (req, res) => {
 });
 
 app.post("/unfollow", (req, res) => {
-    unfollowUser(req.session.userName, req.body.userToUnfollow);
+    console.log("req.body.unFollow:", req.body.userToUnfollow);
+    console.log("req.session", req.session);
+    console.log(
+        "userName:",
+        req.session.userName,
+        "userToUnfollow:",
+        req.body.userToUnfollow
+    );
+    unfollowUser(
+        req.session.userName,
+        req.session.userId,
+        req.body.userToUnfollow
+    );
     res.redirect("back");
 });
 
@@ -68,14 +80,19 @@ app.get("/following", async (req, res) => {
     const arrayOfPeopleYouFollow = await queryUsersTable(currentUser);
     const peopleYouFollow = arrayOfPeopleYouFollow.Items;
     const listOfPeopleYouFollow = getListOfPeopleYouFollow(peopleYouFollow);
-    const list = await getUsersYouFollowsPhotos(listOfPeopleYouFollow);
-    const listOfSignedUrls = signUrlsOfUsersYouFollow(list);
-    res.render("peopleYouFollow", {
-        listOfSignedUrls,
-        list,
-        userName: req.session.userName,
-        arrayOfFollowers: req.session.followers,
-    });
+    console.log(listOfPeopleYouFollow.length);
+    if (listOfPeopleYouFollow.length > 1) {
+        const list = await getUsersYouFollowsPhotos(listOfPeopleYouFollow);
+        const listOfSignedUrls = signUrlsOfUsersYouFollow(list);
+        res.render("peopleYouFollow", {
+            listOfSignedUrls,
+            list,
+            userName: req.session.userName,
+            arrayOfFollowers: req.session.followers,
+        });
+    } else {
+        res.render("notFollowingAnyone");
+    }
 });
 
 app.get("/followers", async (req, res) => {
@@ -130,8 +147,9 @@ app.get("/profile/:id", async (req, res) => {
 app.post("/follow", async (req, res) => {
     const following = req.body.userToFollow;
     const email = req.session.userId;
-    const name = await queryUsersTable(email);
-    const { userName } = name.Items[0];
+    // const name = await queryUsersTable(email);
+    // const { userName } = name.Items[0];
+    const { userName } = req.session;
     await followUser(userName, following, email);
     res.redirect("back");
 });
@@ -156,7 +174,16 @@ app.post("/signin", async (req, res) => {
     req.session.accessToken = accessTokenData.AuthenticationResult.AccessToken;
     req.session.userId = email;
     const loggedInUsersInformation = await queryUsersTable(email);
-    req.session.userName = loggedInUsersInformation.Items[0].userName.toLowerCase();
+    console.log(
+        "loggedInUsersInformation.Items",
+        loggedInUsersInformation.Items
+    );
+    console.log(
+        "loggedInUsersInformation.Items[0].userName",
+        loggedInUsersInformation.Items[0].userName
+    );
+    req.session.userName = loggedInUsersInformation.Items[0].userName;
+    console.log("req.session.userName:", req.session.userName);
     res.redirect("explore");
 });
 

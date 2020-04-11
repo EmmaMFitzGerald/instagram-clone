@@ -1,4 +1,4 @@
-// /* eslint-disable func-names */
+/* eslint-disable func-names */
 // import { describe, it } from "mocha";
 // import { expect } from "chai";
 // // import { table } from "console";
@@ -81,19 +81,19 @@
 //         TableName: "UserTable",
 //         FilterExpression: "email = :email",
 //         ExpressionAttributeValues: {
-//             ":email": "emmamariafitzgerald@gmail.com",
+//             ":email": "emma@unionrealtime.com",
 //         },
 //     };
 
 //     const documentClient = new AWS.DynamoDB.DocumentClient({
 //         region: "us-east-1",
-//     //     });
+//         });
 
-//     //     documentClient.scan(params, function(err: any, data: any) {
-//     //         console.log("this is the users username:", data.Items[0].userName);
-//     //         console.log(data);
-//     //     });
-//     // });
+//         documentClient.scan(params, function(err: any, data: any) {
+//             console.log(data)
+//         });
+//     });
+// });
 
 //     it("should delete photo from the db", function(done) {
 //     const params = {
@@ -126,9 +126,12 @@
 //     const params = {
 //         TableName: "UserTable",
 //         Key: {
-//             userName: "Emma",
-//             following: "Sophie",
+//                 userName: "emma",
 //         },
+//             ConditionExpression: "following = :val",
+//             ExpressionAttributeValues: {
+//                 ":val": "sophie",
+//         }
 //     };
 
 //     console.log("Attempting a conditional delete...");
@@ -149,6 +152,7 @@
 //     });
 // }
 // )});
+
 //     // eslint-disable-next-line func-names
 //     it("should create item in the database", function(done) {
 //         const params = {

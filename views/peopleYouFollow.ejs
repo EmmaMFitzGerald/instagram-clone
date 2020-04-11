@@ -1,7 +1,8 @@
 <%- include('partials/header', { userName, arrayOfFollowers })%>
 
 <h1>People you follow</h1>
-<% for (var i = 0; i < listOfSignedUrls.length; i++) { %>
-    <img src="<%= listOfSignedUrls[i] %>" alt="" height="200px" width="200px">
-    <p><a href="/profile/<%= list[i].Items[0].Name %>"><%= list[i].Items[0].Name %></a></p>
-<% } %>
+
+    <% for (var i = 0; i < listOfSignedUrls.length; i++) { %>
+        <img src="<%= listOfSignedUrls[i] %>" alt="" height="200px" width="200px">
+        <p><a href="/profile/<%= list[i].Items[0].Name %>"><%= list[i].Items[0].Name %></a></p>
+     <% } %>

@@ -6,7 +6,7 @@ export function dynamoHelper(
     photoId: string,
     uploadTime: any,
     name: string,
-    userId: string,
+    userName: string,
     bucketName: string,
     pathname: string
 ): Promise<any> {
@@ -14,7 +14,7 @@ export function dynamoHelper(
         Item: {
             PhotoID: photoId,
             Name: name,
-            UserID: userId,
+            UserID: userName,
             FileName: originalname,
             UploadTime: uploadTime,
             BucketName: bucketName,

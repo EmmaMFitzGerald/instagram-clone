@@ -10,6 +10,8 @@ export function queryUsersTable(userId: any): Promise<any> {
         },
     };
 
+    console.log("query user table params", params)
+
     const documentClient = new AWS.DynamoDB.DocumentClient({
         region: "us-east-1",
     });
