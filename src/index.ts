@@ -61,12 +61,6 @@ app.post("/delete", (req, res) => {
 app.post("/unfollow", (req, res) => {
     console.log("req.body.unFollow:", req.body.userToUnfollow);
     console.log("req.session", req.session);
-    console.log(
-        "userName:",
-        req.session.userName,
-        "userToUnfollow:",
-        req.body.userToUnfollow
-    );
     unfollowUser(
         req.session.userName,
         req.session.userId,
@@ -77,22 +71,22 @@ app.post("/unfollow", (req, res) => {
 
 app.get("/following", async (req, res) => {
     const currentUser = req.session.userId;
-    const arrayOfPeopleYouFollow = await queryUsersTable(currentUser);
-    const peopleYouFollow = arrayOfPeopleYouFollow.Items;
+    const arrayOfPeopleYouFollow = await queryUsersTable(currentUser); // this returns array of objects
+    console.log("arrayOfPeopleYouFollow:", arrayOfPeopleYouFollow) // working as abovwe
+    const peopleYouFollow = arrayOfPeopleYouFollow.Items; // one level deeper
+    console.log("peopleYouFollow", peopleYouFollow) // one level deeper
     const listOfPeopleYouFollow = getListOfPeopleYouFollow(peopleYouFollow);
-    console.log(listOfPeopleYouFollow.length);
-    if (listOfPeopleYouFollow.length > 1) {
-        const list = await getUsersYouFollowsPhotos(listOfPeopleYouFollow);
-        const listOfSignedUrls = signUrlsOfUsersYouFollow(list);
-        res.render("peopleYouFollow", {
-            listOfSignedUrls,
-            list,
-            userName: req.session.userName,
-            arrayOfFollowers: req.session.followers,
-        });
-    } else {
-        res.render("notFollowingAnyone");
-    }
+    console.log("listOfPeopleYouFollow:", listOfPeopleYouFollow);
+    const list = await getUsersYouFollowsPhotos(listOfPeopleYouFollow);
+    console.log("list:", list)
+    // const listOfSignedUrls = signUrlsOfUsersYouFollow(list);
+    const listOfSignedUrls = signUrlsOfUsersYouFollow(list);
+    res.render("peopleYouFollow", {
+        listOfSignedUrls,
+        list,
+        userName: req.session.userName,
+        arrayOfFollowers: req.session.followers,
+    });
 });
 
 app.get("/followers", async (req, res) => {
@@ -106,8 +100,11 @@ app.get("/followers", async (req, res) => {
 
 app.get("/explore", async (req, res) => {
     const allPhotos = await getAllPhotos();
+    console.log("allPhotos:", allPhotos)
     const sortedPhotos = sortPhotosByDate(allPhotos);
+    console.log("sortedPhotos", sortedPhotos);
     const allPhotosSignedURLs = signUrls(sortedPhotos);
+    console.log("allphotossignedurls", allPhotosSignedURLs)
     const { userName } = req.session;
     const listOfFollowers = await getListOfFollowers(userName);
     const arrayOfFollowers = getListFollowers(listOfFollowers);
@@ -134,6 +131,7 @@ app.get("/profile/:id", async (req, res) => {
     const doesThisUserExist = arrayOfAllUsers.includes(id);
     const email = req.session.userId;
     const arrayOfFollowers = req.session.followers;
+    console.log("email", email)
     await getProfilePageHandler(
         arrayOfFollowers,
         id,
@@ -147,8 +145,6 @@ app.get("/profile/:id", async (req, res) => {
 app.post("/follow", async (req, res) => {
     const following = req.body.userToFollow;
     const email = req.session.userId;
-    // const name = await queryUsersTable(email);
-    // const { userName } = name.Items[0];
     const { userName } = req.session;
     await followUser(userName, following, email);
     res.redirect("back");
@@ -157,7 +153,8 @@ app.post("/follow", async (req, res) => {
 app.post("/signup", async (req, res) => {
     const { name, email, password } = req.body;
     signUpUsers(email, password, name);
-    await createUsername(email, name.toLowerCase());
+    const userId = uniqid()
+    await createUsername(email, name.toLowerCase(), userId);
     req.session.userName = name.toLowerCase();
     res.redirect("explore");
 });
@@ -174,16 +171,7 @@ app.post("/signin", async (req, res) => {
     req.session.accessToken = accessTokenData.AuthenticationResult.AccessToken;
     req.session.userId = email;
     const loggedInUsersInformation = await queryUsersTable(email);
-    console.log(
-        "loggedInUsersInformation.Items",
-        loggedInUsersInformation.Items
-    );
-    console.log(
-        "loggedInUsersInformation.Items[0].userName",
-        loggedInUsersInformation.Items[0].userName
-    );
     req.session.userName = loggedInUsersInformation.Items[0].userName;
-    console.log("req.session.userName:", req.session.userName);
     res.redirect("explore");
 });
 

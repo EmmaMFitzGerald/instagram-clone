@@ -2,7 +2,6 @@ import AWS = require("aws-sdk");
 
 // eslint-disable-next-line import/prefer-default-export
 export function getListOfFollowers(userId: any): Promise<any> {
-    console.log("list of followers user id", userId);
     const params = {
         TableName: "UserTable",
         FilterExpression: "following = :following",

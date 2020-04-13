@@ -15,7 +15,7 @@ export function unfollowUser(
         TableName: "UserTable",
         Key: {
             userName: currentUser,
-            email,
+            following: userToUnfollow,
         },
         ConditionExpression: "following = :val",
         ExpressionAttributeValues: {

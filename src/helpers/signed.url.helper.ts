@@ -13,11 +13,11 @@ const s3 = new AWS.S3();
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 // eslint-disable-next-line import/prefer-default-export
 export function signUrls(userPhotos: any) {
-    console.log(userPhotos);
+    console.log("users photos in signurls", userPhotos);
     let photo;
     const usersPhotoArray = [];
     for (photo of userPhotos) {
-        console.log(photo);
+        console.log('photo in signurls:', photo);
         const myBucket = photo.BucketName;
         const myKey = photo.PathName.slice(8);
         const signedUrlExpireSeconds = 60 * 5;

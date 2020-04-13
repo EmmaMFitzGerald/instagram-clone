@@ -1,10 +1,11 @@
 import AWS = require("aws-sdk");
 
 // eslint-disable-next-line import/prefer-default-export
-export function createUsername(email: any, name: any) {
+export function createUsername(email: any, name: any, userId: any) {
     const params = {
         Item: {
             userName: name,
+            following: " ",
             email,
         },
         TableName: "UserTable",
