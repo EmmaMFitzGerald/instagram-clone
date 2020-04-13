@@ -5,7 +5,7 @@ import { queryUsersTable } from "../helpers/get.username.dynamo.helper";
 import { sortPhotosByDate } from "../helpers/sort.photos.helper";
 // eslint-disable-next-line import/prefer-default-export
 export async function getProfilePageHandler(
-    arrayOfFollowers: any,
+    arrayOfUsersFollowers: any,
     id: any,
     email: any,
     userName: any,
@@ -22,7 +22,7 @@ export async function getProfilePageHandler(
             usersPhotos: usersPhotos.Items,
             userName,
             usersSignedURLs,
-            arrayOfFollowers,
+            arrayOfUsersFollowers,
         });
     } else if (doesThisUserExist === true && userName !== id) {
         const arrayOfPeopleYouFollow = await queryUsersTable(email);
@@ -42,9 +42,9 @@ export async function getProfilePageHandler(
             usersSignedURLs,
             userName,
             doesCurrentUserFollowThisProfile,
-            arrayOfFollowers,
+            arrayOfUsersFollowers,
         });
     } else {
-        res.render("profileDoesntExist", { userName, arrayOfFollowers });
+        res.render("profileDoesntExist", { userName, arrayOfUsersFollowers });
     }
 }

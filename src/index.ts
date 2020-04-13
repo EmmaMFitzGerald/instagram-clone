@@ -22,7 +22,7 @@ import { getArrayOfAllUsers } from "./helpers/get.array.of.all.users";
 import { deletePhotoHelper } from "./helpers/delete.photo.helper";
 import { getListOfFollowers } from "./helpers/get.list.of.followers";
 import { unfollowUser } from "./helpers/unfollow.user";
-import { getListFollowers } from "./helpers/list.of.followers";
+import { getArrayOfFollowers } from "./helpers/array.of.followers";
 import { getProfilePageHandler } from "./handlers/get.profile.page.handler";
 import { sortPhotosByDate } from "./helpers/sort.photos.helper";
 // import methodOverride = require("method-override");
@@ -81,6 +81,15 @@ app.get("/following", async (req, res) => {
     });
 });
 
+// app.get("/followers", async (req, res) => {
+//     const listOfFollowers = await getListOfFollowers(req.session.userName);
+//     const arrayOfFollowers = getListFollowers(listOfFollowers);
+//     res.render("followers", {
+//         arrayOfFollowers,
+//         userName: req.session.userName,
+//     });
+// });
+
 app.get("/followers", async (req, res) => {
     const listOfFollowers = await getListOfFollowers(req.session.userName);
     const arrayOfFollowers = getListFollowers(listOfFollowers);
@@ -93,17 +102,15 @@ app.get("/followers", async (req, res) => {
 app.get("/explore", async (req, res) => {
     const allPhotos = await getAllPhotos();
     const sortedPhotos = sortPhotosByDate(allPhotos);
-    console.log("this is what sorted photos looks like for explore", sortedPhotos)
     const allPhotosSignedURLs = signUrls(sortedPhotos);
     const { userName } = req.session;
-    const listOfFollowers = await getListOfFollowers(userName);
-    const arrayOfFollowers = getListFollowers(listOfFollowers);
-    req.session.followers = arrayOfFollowers;
+    // const listOfFollowers = await getListOfFollowers(userName);
+    // const arrayOfFollowers = getArrayOfFollowers(listOfFollowers);
+    // req.session.followers = arrayOfFollowers;
     res.render("explore", {
         allPhotosSignedURLs,
         allPhotos,
         userName,
-        arrayOfFollowers,
     });
 });
 
@@ -116,14 +123,18 @@ app.get("/signout", (req, res) => {
 app.get("/profile/:id", async (req, res) => {
     const allUsers = await getAllUsers();
     const { id } = req.params;
+
+    const listOfUsersFollowers = await getListOfFollowers(id);
+    const arrayOfUsersFollowers = getArrayOfFollowers(listOfUsersFollowers);
+    console.log("arrayOfUsersFollowers:", arrayOfUsersFollowers);
+
     const { userName } = req.session;
     const arrayOfAllUsers = getArrayOfAllUsers(allUsers);
     const doesThisUserExist = arrayOfAllUsers.includes(id);
     const email = req.session.userId;
-    const arrayOfFollowers = req.session.followers;
     console.log("email", email);
     await getProfilePageHandler(
-        arrayOfFollowers,
+        arrayOfUsersFollowers,
         id,
         email,
         userName,

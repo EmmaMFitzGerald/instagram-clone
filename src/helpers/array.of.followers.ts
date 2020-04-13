@@ -1,6 +1,6 @@
 /* eslint-disable no-plusplus */
 // eslint-disable-next-line import/prefer-default-export
-export function getListFollowers(followers: any): any {
+export function getArrayOfFollowers(followers: any): any {
     const listOfFollowers = [];
 
     for (let i = 0, l = followers.Items.length; i < l; i++) {

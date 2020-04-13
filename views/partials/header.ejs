@@ -10,7 +10,7 @@
                   <% if (userName) { %>
                   <li>You are signed in as <a href="/profile/<%=userName%>"><%= userName %></a></li>
                   <li><a href="/following">Following</a></li>
-                  <li><a href="/followers"><%= arrayOfFollowers.length %> Followers</a></li>
+                  <li><a href="/followers"><%= arrayOfUsersFollowers.length %> Followers</a></li>
                   <form method="post" action="/search">
                     <input type="text" placeholder="Search for Users" name="search">
                     <button type="submit"><i class="fa fa-search"></i></button>
