@@ -1,13 +1,13 @@
-<link href="../css/style.css" rel="stylesheet" type="text/css">
-<link href="https://fonts.googleapis.com/css2?family=Concert+One&display=swap" rel="stylesheet">
-<div class="container" id="signinform">
-<h1 class="signin">Sign In</h1>
-<form method="POST" action="/signin">
-    <label for="email"><b>Email</b></label>
-    <input type="text" placeholder="Enter Email" name="email" required>
+<link href="../css/sign.style.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+<div class="box" id="signinform">
+    <img src="../images/Image.jpg" alt="PhotoBook Logo" class="logo"/> 
+    <h1 class="signin">Sign In</h1>
+        <form method="POST" action="/signin">
+            <input class="email" type="text" placeholder="Enter Email" name="email" required>
 
-    <label for="password"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="password" required>
+            <input class="password" type="password" placeholder="Enter Password" name="password" required>
 
-    <button type="submit">Login</button>
-</form>
+            <button type="submit" class="submit">Sign In</button>
+        </form>
+</div>

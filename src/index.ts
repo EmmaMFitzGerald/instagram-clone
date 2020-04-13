@@ -12,11 +12,9 @@ import { signOutUser } from "./helpers/signout.helper";
 import { addUserToUserTable } from "./helpers/username.helper";
 import { getAllPhotos } from "./helpers/get.all.photos.helper";
 import { queryUsersTable } from "./helpers/get.username.dynamo.helper";
-import { getUsersPhoto } from "./helpers/profile.query.dynamo.helper";
 import { followUser } from "./helpers/follow.user";
-import { getListOfPeopleYouFollow } from "./helpers/get.following.from.db";
+import { getListOfPeopleYouFollow } from "./helpers/filter.array.of.following";
 import { getUsersYouFollowsPhotos } from "./helpers/get.users.you.follows.photos";
-import { signUrlsOfUsersYouFollow } from "./helpers/sign.users.you.follows.photos";
 import { getAllUsers } from "./helpers/get.all.users.helper";
 import { getArrayOfAllUsers } from "./helpers/get.array.of.all.users";
 import { deletePhotoHelper } from "./helpers/delete.photo.helper";
@@ -25,6 +23,8 @@ import { unfollowUser } from "./helpers/unfollow.user";
 import { getArrayOfFollowers } from "./helpers/array.of.followers";
 import { getProfilePageHandler } from "./handlers/get.profile.page.handler";
 import { sortPhotosByDate } from "./helpers/sort.photos.helper";
+import { getArrayOfPhotos } from "./helpers/get.array.of.photo.info";
+import { getListOfFollowing } from "./helpers/get.list.of.people.you.follow";
 // import methodOverride = require("method-override");
 const app = express();
 app.use(express.static(`${__dirname}/public`));
@@ -40,7 +40,6 @@ app.use(session({ secret: "sessionsecret" }));
 
 
 import multer = require("multer");
-import { getArrayOfPhotoInfo, getArrayOfPhotos } from "./helpers/get.array.of.photo.info";
 const upload = multer({ dest: "uploads/" });
 
 app.get("/", (req, res) => {
@@ -65,10 +64,10 @@ app.post("/unfollow", (req, res) => {
     res.redirect("back");
 });
 
-app.get("/following", async (req, res) => {
-    const currentUser = req.session.userId;
-    const arrayOfPeopleYouFollow = await queryUsersTable(currentUser);
-    const peopleYouFollow = arrayOfPeopleYouFollow.Items;
+app.post("/following", async (req, res) => {
+    const { userName } = req.body;
+    const listOfFollowing = await getListOfFollowing(userName);
+    const peopleYouFollow = listOfFollowing.Items;
     const listOfPeopleYouFollow = getListOfPeopleYouFollow(peopleYouFollow);
     const list = await getUsersYouFollowsPhotos(listOfPeopleYouFollow);
     const array = getArrayOfPhotos(list);
@@ -76,26 +75,18 @@ app.get("/following", async (req, res) => {
     res.render("peopleYouFollow", {
         listOfSignedUrls,
         list,
-        userName: req.session.userName,
-        arrayOfFollowers: req.session.followers,
+        userName,
+        listOfPeopleYouFollow,
     });
 });
 
-// app.get("/followers", async (req, res) => {
-//     const listOfFollowers = await getListOfFollowers(req.session.userName);
-//     const arrayOfFollowers = getListFollowers(listOfFollowers);
-//     res.render("followers", {
-//         arrayOfFollowers,
-//         userName: req.session.userName,
-//     });
-// });
-
-app.get("/followers", async (req, res) => {
-    const listOfFollowers = await getListOfFollowers(req.session.userName);
-    const arrayOfFollowers = getListFollowers(listOfFollowers);
+app.post("/followers", async (req, res) => {
+    const { userName } = req.body;
+    const listOfFollowers = await getListOfFollowers(userName);
+    const arrayOfFollowers = getArrayOfFollowers(listOfFollowers);
     res.render("followers", {
         arrayOfFollowers,
-        userName: req.session.userName,
+        userName,
     });
 });
 
@@ -104,9 +95,6 @@ app.get("/explore", async (req, res) => {
     const sortedPhotos = sortPhotosByDate(allPhotos);
     const allPhotosSignedURLs = signUrls(sortedPhotos);
     const { userName } = req.session;
-    // const listOfFollowers = await getListOfFollowers(userName);
-    // const arrayOfFollowers = getArrayOfFollowers(listOfFollowers);
-    // req.session.followers = arrayOfFollowers;
     res.render("explore", {
         allPhotosSignedURLs,
         allPhotos,
@@ -126,7 +114,12 @@ app.get("/profile/:id", async (req, res) => {
 
     const listOfUsersFollowers = await getListOfFollowers(id);
     const arrayOfUsersFollowers = getArrayOfFollowers(listOfUsersFollowers);
-    console.log("arrayOfUsersFollowers:", arrayOfUsersFollowers);
+    console.log("array of users followers", arrayOfUsersFollowers);
+
+    const listOfFollowing = await getListOfFollowing(id);
+    const peopleYouFollow = listOfFollowing.Items;
+    const listOfPeopleYouFollow = getListOfPeopleYouFollow(peopleYouFollow);
+    console.log("list of people user follows", listOfPeopleYouFollow)
 
     const { userName } = req.session;
     const arrayOfAllUsers = getArrayOfAllUsers(allUsers);
@@ -135,6 +128,7 @@ app.get("/profile/:id", async (req, res) => {
     console.log("email", email);
     await getProfilePageHandler(
         arrayOfUsersFollowers,
+        listOfPeopleYouFollow,
         id,
         email,
         userName,
@@ -164,7 +158,8 @@ app.post("/signup", async (req, res) => {
 });
 
 app.post("/search", (req, res) => {
-    res.redirect(`profile/${req.body.search}`);
+    const { search } = req.body;
+    res.redirect(`profile/${search.toLowerCase()}`);
 });
 
 app.post("/signin", async (req, res) => {

@@ -1,0 +1,28 @@
+<link href="../css/profile.header.style.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css2?family=Concert+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<body>
+    <header>
+      <a href="/explore">
+        <img src="../images/Image.jpg" alt="PhotoBook Logo" class="logo"/> 
+        </a>
+            <nav>
+              <ul class="navlinks">
+                  <li><%= id %>'s Profile</li>
+                  <li><form method="post" action="/following">
+                    <input type="hidden" value="<%= id %>" name="userName">
+                    <input type="submit" value="<%= listOfPeopleYouFollow.length %> Following">
+                  </form></li>
+                  <li><form method="post" action="/followers">
+                    <input type="hidden" value="<%= id %>" name="userName">
+                    <input type="submit" value="<%= arrayOfUsersFollowers.length %> Followers">
+                  <li><form method="post" action="/search">
+                    <input type="text" placeholder="Search for Users" name="search">
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                  </form></li>
+                  <li><a href="/explore">Explore</a></li>
+                  <li><a href="/signout">Sign Out</a></li>
+              </ul>
+            </nav>
+  </header>
+</body>

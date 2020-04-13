@@ -1,28 +1,39 @@
-  <link href="../css/style.css" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css2?family=Concert+One&display=swap" rel="stylesheet">
+  <link href="../css/header.style.css" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <body>
-    <header>
-      <p class="logo">Instagram</p>
-        <div class="container">
-          <nav>
-              <ul class="navlinks">
-                  <% if (userName) { %>
-                  <li>You are signed in as <a href="/profile/<%=userName%>"><%= userName %></a></li>
-                  <li><a href="/following">Following</a></li>
-                  <li><a href="/followers"><%= arrayOfUsersFollowers.length %> Followers</a></li>
-                  <form method="post" action="/search">
-                    <input type="text" placeholder="Search for Users" name="search">
-                    <button type="submit"><i class="fa fa-search"></i></button>
-                  </form>
-                  <li><a href="/explore">Explore</a></li>
-                  <li><a href="/signout">Sign Out</a></li>
-                    <% } else { %>
-                  <li><a href="/signup">Sign Up</a></li>
-                  <li><a href="/signin">Sign In<a></li>
-                    <% } %>
-              </ul>
-            </nav>
-        </div>
-  </header>
+      <header>
+        <a href="/explore">
+          <img src="../images/Image.jpg" alt="PhotoBook Logo" class="logo"/> 
+          </a>
+          <div class="nav">
+                <ul class="navlinks">
+                    <li><%= id %>'s Profile</li>
+                    <% if (doesCurrentUserFollowThisProfile === true) { %>
+                      <form method="post" action="/unfollow">
+                          <input type="hidden" name="userToUnfollow" value="<%= id %>">
+                          <input type="submit" value="Unfollow">
+                      </form>
+                  <% } else { %>
+                      <form method="post" action="/follow">
+                          <input type="hidden" name="userToFollow" value="<%= id %>"/>
+                          <input type="submit" value="Follow">
+                      </form>
+                  <% } %>
+                    <li><form method="post" action="/following">
+                      <input type="hidden" value="<%= id %>" name="userName">
+                      <input type="submit" value="<%= listOfPeopleYouFollow.length %> Following"/>
+                    </form></li>
+                    <li><form method="post" action="/followers">
+                      <input type="hidden" value="<%= id %>" name="userName">
+                      <input type="submit" value="<%= arrayOfUsersFollowers.length %> Followers"/>
+                    <li><form method="post" action="/search">
+                      <input type="text" placeholder="Search for Users" name="search">
+                      <button type="submit"><i class="fa fa-search"></i></button>
+                    </form></li>
+                    <li><a href="/explore">Explore</a></li>
+                    <li><a href="/profile/<%=userName%>">My Profile</a></li>
+                    <li><a href="/signout">Sign Out</a></li>
+                </ul>
+          </div>
+    </header>
   </body>

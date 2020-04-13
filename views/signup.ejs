@@ -1,14 +1,13 @@
-<link href="../css/style.css" rel="stylesheet" type="text/css">
-<link href="https://fonts.googleapis.com/css2?family=Concert+One&display=swap" rel="stylesheet">
-<h1>Sign up</h1>
-<form method="POST" action="/signup">
-    <label for="name">Username</label>
-    <input type="text" name="name" id="name" placeholder="Name" required>
-    <label for="email">Email</label>
-    <input type="text" name="email" id="email" placeholder="Email" required/>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" placeholder="Password" required/>
-    <label for="confirm-password">Confirm Password</label>
-    <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" required/>
-    <button type="submit">Sign Up</button>
-</form>
+<link href="../css/sign.style.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+ <div class="box">   
+    <img src="../images/Image.jpg" alt="PhotoBook Logo" class="logo"/> 
+        <h1>Sign up</h1>
+        <form method="POST" action="/signup">
+            <input class="email" type="text" name="name" id="name" placeholder="Name" required>
+            <input class="email" type="text" name="email" id="email" placeholder="Email" required/>
+            <input class="password" type="password" name="password" id="password" placeholder="Password" required/>
+            <input class="password" type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" required/>
+            <button type="submit" class="submit">Sign Up</button>
+        </form>
+</div>

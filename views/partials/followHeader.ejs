@@ -9,7 +9,7 @@
         <nav>
             <ul class="navlinks">
                 <% if (userName) { %>
-                <li>Welcome <a href="/profile/<%=userName%>"><%= userName %></a></li>
+                <li><a href="/profile/<%=userName%>"><%= userName %></a>'s Profile</li>
                 <li><form method="post" action="/search">
                   <input type="text" placeholder="Search for Users" name="search">
                   <button type="submit"><i class="fa fa-search"></i></button>

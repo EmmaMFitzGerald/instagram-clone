@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
+
+body {
+    background-color: #E8E9E9;
+}
+
+header {
+    background-color: #E9E9E9;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    float: right;
+    font-family: 'Lilita One', cursive;
+} 
+
+nav {
+    float: right;
+    margin-left: 300px;
+}
+
+header * {
+    display: inline;
+}
+
+header li {
+    margin: 20px;
+    color:#000040;
+}
+
+.logo {
+    margin-left: 40px;
+    margin-top: 40px;
+    width: 175px;
+    height: 100px;
+}
+
+header li a {
+    color: #000040;
+    text-decoration: none;
+}
+
+header li a:hover {
+   color: #78cfba;
+}
+
+input {
+    background-color: #E8E9E9;
+    font-family: 'Lilita One', cursive;
+    color: #000040;
+    font-size: medium;
+    width: 120px;
+}
+
+body {
+    margin-top: 90px;
+    padding: 30px;
+}
+
+button {
+    font-family: 'Lilita One', cursive;
+    border: none;
+    background-color:  #E8E9E9;
+    color:  #000040;
+    font-size: medium;
+    margin-left: 5px;
+}
+
+button:hover {
+    color: #78cfba;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover{
+    color :#78cfba; 
+ }
+
+input {
+    border: none;   
+}
+
+img {
+    border-radius: 8px;
+}
+  
+.displayImages {
+    display: inline-block;
+}
+
+.images {
+    border-radius: 8px;
+    margin: 25px;
+    border: #78cfba 6px solid;
+    background-color: #78cfba;
+}
+
+.images:hover {
+    border: #3498db 6px solid;
+    background-color: #3498db;
+}
+
+.delete {
+    margin-top: 0px;
+    float: right;
+}
+
+.following {
+    font-family: 'Lilita One', cursive;
+    font-size: 30px;
+    margin-left: 26px;
+    margin-top: 20px;
+    color:#000040
+}

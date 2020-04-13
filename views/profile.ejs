@@ -1,14 +1,12 @@
-<%- include('partials/header', { userName, arrayOfUsersFollowers })%>
-<link href="css/style.css" rel="stylesheet" type="text/css">
+<%- include('partials/loggedInUsersHeader', { userName, arrayOfUsersFollowers, id: userName })%>
+<link href="../css/profile.header.style.css" rel="stylesheet" type="text/css">
 <link
     rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css">
  <link href="../css/style.css" rel="stylesheet" type="text/css">
 <div>
-
-    <h2>Welcome <%= userName %></h2>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
     <form id="upload-widget" method="post" action="/upload" class="dropzone"><input type="hidden" name="currentUser" value="<%= userName %>"/></form>
-    <button onclick="reload()">Add Photo</button>
+    <button onclick="reload()" class="addPhoto">Add Photo</button>
 </div>
 
 <script>
@@ -18,11 +16,15 @@
 </script>
 
     <% for (var i = 0; i < usersSignedURLs.length; i++) { %>
-        <img src="<%= usersSignedURLs[i] %>" alt="" height="200px" width="200px">
-        <form method="post" action="/delete">
-           <input type="hidden" name="photoId" value="<%= usersPhotos[i].PhotoID %>">
-           <input type="submit" value="Delete">
-       </form>
+    <div class="displayImages">
+        <div class="images">
+            <img src="<%= usersSignedURLs[i] %>" alt="" height="200px" width="200px">
+        </div>
+            <form method="post" action="/delete">
+                <input type="hidden" name="photoId" value="<%= usersPhotos[i].PhotoID %>">
+                <input type="submit" value="delete" class="delete">
+        </form>
+    </div>
     <% } %>
 
 </body>

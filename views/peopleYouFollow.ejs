@@ -1,8 +1,17 @@
-<%- include('partials/header', { userName, arrayOfFollowers })%>
-
-<h1>People you follow</h1>
-
-    <% for (var i = 0; i < listOfSignedUrls.length; i++) { %>
-        <img src="<%= listOfSignedUrls[i] %>" alt="" height="200px" width="200px">
-        <p><a href="/profile/<%= list[i].Items[0].Name %>"><%= list[i].Items[0].Name %></a></p>
-     <% } %>
+<%- include('partials/followHeader', { id: userName })%>
+<link href="../css/explore.style.css" rel="stylesheet" type="text/css">
+<body>
+    <h3 class="following">Following</h3>
+    <% if (listOfSignedUrls.length === 0) { %>
+        <p class="following">This user isn't following anyone yet!</p>
+    <% } else { %>
+            <% for (var i = 0; i < listOfSignedUrls.length; i++) { %>
+                <div class="displayImages">
+                    <div class="images">
+                        <img src="<%= listOfSignedUrls[i] %>" alt="" height="200px" width="200px">
+                    </div>
+                <p class="displayUserName"><a href="/profile/<%= list[i].Items[0].Name %>"><%= list[i].Items[0].Name %></a></p>
+            </div>
+        <% } %>
+    <% } %>
+</body>

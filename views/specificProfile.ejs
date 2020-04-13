@@ -1,25 +1,16 @@
-<%- include('partials/header', { userName, arrayOfUsersFollowers })%>
+<%- include('partials/header', { userName, arrayOfUsersFollowers, id, doesCurrentUserFollowThisProfile })%>
+<link href="../css/profile.header.style.css" rel="stylesheet" type="text/css">
 
-<h1>This is <%= id %>'s Page</h1>
-<% if (doesCurrentUserFollowThisProfile === true) { %>
-    <p>You follow <%= id %> </p>
-    <form method="post" action="/unfollow">
-        <input type="hidden" name="userToUnfollow" value="<%= id %>">
-        <input type="submit" value="Unfollow">
-    </form>
-<% } else { %>
-    <form method="post" action="/follow">
-        <input type="hidden" name="userToFollow" value="<%= id %>"/>
-        <input type="submit" value="Follow">
-    </form>
-<% } %>
-
-<% if (usersSignedURLs.length === 0) { %> 
-    <p><%= id %> doesn't have any photos yet!</p>
-<% } else { %> 
-    <% for (var i = 0; i < usersSignedURLs.length; i++) { %>
-        <img src="<%= usersSignedURLs[i] %>" alt="" height="200px" width="200px">
+<body>
+    <% if (usersSignedURLs.length === 0) { %> 
+        <p class="following"><%= id %> doesn't have any photos yet!</p>
+    <% } else { %> 
+        <% for (var i = 0; i < usersSignedURLs.length; i++) { %>
+        <div class="displayImages">
+                <div class="images">
+                    <img src="<%= usersSignedURLs[i] %>" alt="" height="200px" width="200px">
+                </div>
+        </div>
+        <% } %>
     <% } %>
-<% } %>
-
 </body>

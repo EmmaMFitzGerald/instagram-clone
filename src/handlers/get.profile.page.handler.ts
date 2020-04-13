@@ -1,11 +1,12 @@
 import { getUsersPhoto } from "../helpers/profile.query.dynamo.helper";
 import { signUrls } from "../helpers/signed.url.helper";
-import { getListOfPeopleYouFollow } from "../helpers/get.following.from.db";
+import { getListOfPeopleYouFollow } from "../helpers/filter.array.of.following";
 import { queryUsersTable } from "../helpers/get.username.dynamo.helper";
 import { sortPhotosByDate } from "../helpers/sort.photos.helper";
 // eslint-disable-next-line import/prefer-default-export
 export async function getProfilePageHandler(
     arrayOfUsersFollowers: any,
+    listOfPeopleYouFollow: any,
     id: any,
     email: any,
     userName: any,
@@ -23,12 +24,15 @@ export async function getProfilePageHandler(
             userName,
             usersSignedURLs,
             arrayOfUsersFollowers,
+            listOfPeopleYouFollow,
         });
     } else if (doesThisUserExist === true && userName !== id) {
         const arrayOfPeopleYouFollow = await queryUsersTable(email);
         const peopleYouFollow = arrayOfPeopleYouFollow.Items;
-        const listOfPeopleYouFollow = getListOfPeopleYouFollow(peopleYouFollow);
-        const doesCurrentUserFollowThisProfile = listOfPeopleYouFollow.includes(
+        const listOfPeopleCurrentUserFollows = getListOfPeopleYouFollow(
+            peopleYouFollow
+        );
+        const doesCurrentUserFollowThisProfile = listOfPeopleCurrentUserFollows.includes(
             id
         );
         const specificUsersPhotos = await getUsersPhoto(id);
@@ -43,6 +47,7 @@ export async function getProfilePageHandler(
             userName,
             doesCurrentUserFollowThisProfile,
             arrayOfUsersFollowers,
+            listOfPeopleYouFollow,
         });
     } else {
         res.render("profileDoesntExist", { userName, arrayOfUsersFollowers });

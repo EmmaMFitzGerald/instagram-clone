@@ -1,5 +1,10 @@
-<%- include('partials/header', { userName })%>
-
-<% for (let i = 0, l = arrayOfFollowers.length; i < l; i++) { %>
-    <p><%= arrayOfFollowers[i] %></p>
-<% } %>
+<%- include('partials/followHeader', { id: userName })%>
+<link href="../css/explore.style.css" rel="stylesheet" type="text/css">
+<div>
+    <h3 class="following">Followers</h3>
+    <% for (let i = 0, l = arrayOfFollowers.length; i < l; i++) { %>
+        <div class="followers">
+          <a href="/profile/<%=arrayOfFollowers[i]%>"><%= arrayOfFollowers[i] %></a>
+        </div>
+    <% } %>
+</div>
