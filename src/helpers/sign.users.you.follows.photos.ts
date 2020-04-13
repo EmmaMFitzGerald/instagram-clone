@@ -12,10 +12,12 @@ const s3 = new AWS.S3();
 // eslint-disable-next-line import/prefer-default-export
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 // eslint-disable-next-line import/prefer-default-export
-export function signUrlsOfUsersYouFollow(userPhotos: any) {
-    console.log("users photos in sign urls of users you follow:", userPhotos)
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+// eslint-disable-next-line import/prefer-default-export
+export function signUrlsOfUsersYouFollow(userPhotos: any): any {
     const usersPhotoArray = [];
 
+    // eslint-disable-next-line no-plusplus
     for (let i = 0, l = userPhotos.length; i < l; i++) {
         console.log("inside signurlsofpeopleyoufollow", userPhotos[i].Items[0]);
         const myBucket = userPhotos[i].Items[0].BucketName;
@@ -29,7 +31,6 @@ export function signUrlsOfUsersYouFollow(userPhotos: any) {
         });
         usersPhotoArray.push(url);
     }
-    console.log(usersPhotoArray);
 
     return usersPhotoArray;
 }

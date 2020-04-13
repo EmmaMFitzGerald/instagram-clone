@@ -2,7 +2,7 @@ import { getUsersPhoto } from "../helpers/profile.query.dynamo.helper";
 import { signUrls } from "../helpers/signed.url.helper";
 import { getListOfPeopleYouFollow } from "../helpers/get.following.from.db";
 import { queryUsersTable } from "../helpers/get.username.dynamo.helper";
-
+import { sortPhotosByDate } from "../helpers/sort.photos.helper";
 // eslint-disable-next-line import/prefer-default-export
 export async function getProfilePageHandler(
     arrayOfFollowers: any,
@@ -14,7 +14,8 @@ export async function getProfilePageHandler(
 ): Promise<any> {
     if (doesThisUserExist === true && userName === id) {
         const usersPhotos = await getUsersPhoto(userName);
-        const usersSignedURLs = signUrls(usersPhotos.Items);
+        const sortedPhotos = sortPhotosByDate(usersPhotos);
+        const usersSignedURLs = signUrls(sortedPhotos);
         const usersItems = usersPhotos.Items;
         console.log("usersItems", usersItems);
         res.render("profile", {
@@ -31,7 +32,10 @@ export async function getProfilePageHandler(
             id
         );
         const specificUsersPhotos = await getUsersPhoto(id);
-        const usersSignedURLs = signUrls(specificUsersPhotos.Items);
+        const sortedPhotos = sortPhotosByDate(specificUsersPhotos);
+        console.log("sorted photos:", sortedPhotos);
+        const usersSignedURLs = signUrls(sortedPhotos);
+        // const usersSignedURLs = signUrls(specificUsersPhotos.Items);
         res.render("specificProfile", {
             specificUsersPhotos,
             id,

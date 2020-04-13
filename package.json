@@ -50,6 +50,7 @@
         "aws-amplify": "^3.0.5",
         "aws-sdk": "^2.654.0",
         "busboy": "^0.3.1",
+        "connect-flash": "^0.1.1",
         "core-js": "^3.6.4",
         "dotenv": "^8.2.0",
         "dropzone": "^5.7.0",

@@ -1,14 +1,9 @@
 // import AWS = require("aws-sdk");
-import { PinpointEmail } from "aws-sdk";
 
 import AWS = require("aws-sdk");
 // // eslint-disable-next-line import/prefer-default-export
 // eslint-disable-next-line import/prefer-default-export
-export function unfollowUser(
-    currentUser: any,
-    email: any,
-    userToUnfollow: any
-) {
+export function unfollowUser(currentUser: any, userToUnfollow: any): any {
     console.log("currentUser", currentUser);
     console.log("userToUnfollow", userToUnfollow);
     const params = {

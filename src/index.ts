@@ -9,7 +9,7 @@ import { signUrls } from "./helpers/signed.url.helper";
 import { signUpUsers } from "./helpers/signup.helper";
 import { signInUser } from "./helpers/signin.helper";
 import { signOutUser } from "./helpers/signout.helper";
-import { createUsername } from "./helpers/username.helper";
+import { addUserToUserTable } from "./helpers/username.helper";
 import { getAllPhotos } from "./helpers/get.all.photos.helper";
 import { queryUsersTable } from "./helpers/get.username.dynamo.helper";
 import { getUsersPhoto } from "./helpers/profile.query.dynamo.helper";
@@ -23,7 +23,7 @@ import { deletePhotoHelper } from "./helpers/delete.photo.helper";
 import { getListOfFollowers } from "./helpers/get.list.of.followers";
 import { unfollowUser } from "./helpers/unfollow.user";
 import { getListFollowers } from "./helpers/list.of.followers";
-import { getProfilePageHandler } from "./handlers/getProfilePageHandler";
+import { getProfilePageHandler } from "./handlers/get.profile.page.handler";
 import { sortPhotosByDate } from "./helpers/sort.photos.helper";
 // import methodOverride = require("method-override");
 const app = express();
@@ -38,7 +38,9 @@ console.log(`Static direction is: ${staticDir}`);
 app.use(express.static(staticDir));
 app.use(session({ secret: "sessionsecret" }));
 
+
 import multer = require("multer");
+import { getArrayOfPhotoInfo, getArrayOfPhotos } from "./helpers/get.array.of.photo.info";
 const upload = multer({ dest: "uploads/" });
 
 app.get("/", (req, res) => {
@@ -59,28 +61,18 @@ app.post("/delete", (req, res) => {
 });
 
 app.post("/unfollow", (req, res) => {
-    console.log("req.body.unFollow:", req.body.userToUnfollow);
-    console.log("req.session", req.session);
-    unfollowUser(
-        req.session.userName,
-        req.session.userId,
-        req.body.userToUnfollow
-    );
+    unfollowUser(req.session.userName, req.body.userToUnfollow);
     res.redirect("back");
 });
 
 app.get("/following", async (req, res) => {
     const currentUser = req.session.userId;
-    const arrayOfPeopleYouFollow = await queryUsersTable(currentUser); // this returns array of objects
-    console.log("arrayOfPeopleYouFollow:", arrayOfPeopleYouFollow) // working as abovwe
-    const peopleYouFollow = arrayOfPeopleYouFollow.Items; // one level deeper
-    console.log("peopleYouFollow", peopleYouFollow) // one level deeper
+    const arrayOfPeopleYouFollow = await queryUsersTable(currentUser);
+    const peopleYouFollow = arrayOfPeopleYouFollow.Items;
     const listOfPeopleYouFollow = getListOfPeopleYouFollow(peopleYouFollow);
-    console.log("listOfPeopleYouFollow:", listOfPeopleYouFollow);
     const list = await getUsersYouFollowsPhotos(listOfPeopleYouFollow);
-    console.log("list:", list)
-    // const listOfSignedUrls = signUrlsOfUsersYouFollow(list);
-    const listOfSignedUrls = signUrlsOfUsersYouFollow(list);
+    const array = getArrayOfPhotos(list);
+    const listOfSignedUrls = signUrls(array);
     res.render("peopleYouFollow", {
         listOfSignedUrls,
         list,
@@ -100,11 +92,9 @@ app.get("/followers", async (req, res) => {
 
 app.get("/explore", async (req, res) => {
     const allPhotos = await getAllPhotos();
-    console.log("allPhotos:", allPhotos)
     const sortedPhotos = sortPhotosByDate(allPhotos);
-    console.log("sortedPhotos", sortedPhotos);
+    console.log("this is what sorted photos looks like for explore", sortedPhotos)
     const allPhotosSignedURLs = signUrls(sortedPhotos);
-    console.log("allphotossignedurls", allPhotosSignedURLs)
     const { userName } = req.session;
     const listOfFollowers = await getListOfFollowers(userName);
     const arrayOfFollowers = getListFollowers(listOfFollowers);
@@ -131,7 +121,7 @@ app.get("/profile/:id", async (req, res) => {
     const doesThisUserExist = arrayOfAllUsers.includes(id);
     const email = req.session.userId;
     const arrayOfFollowers = req.session.followers;
-    console.log("email", email)
+    console.log("email", email);
     await getProfilePageHandler(
         arrayOfFollowers,
         id,
@@ -151,21 +141,22 @@ app.post("/follow", async (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-    const { name, email, password } = req.body;
-    signUpUsers(email, password, name);
-    const userId = uniqid()
-    await createUsername(email, name.toLowerCase(), userId);
-    req.session.userName = name.toLowerCase();
-    res.redirect("explore");
+    const { name, email, password, confirmPassword } = req.body;
+    if (password === confirmPassword) {
+        signUpUsers(email, password, name);
+        await addUserToUserTable(email, name.toLowerCase());
+        req.session.userName = name.toLowerCase();
+        res.redirect("explore");
+    } else {
+        res.render("signup");
+    }
 });
 
 app.post("/search", (req, res) => {
-    console.log("search req.body", req.body);
     res.redirect(`profile/${req.body.search}`);
 });
 
 app.post("/signin", async (req, res) => {
-    console.log("sign in req:", req);
     const { email, password } = req.body;
     const accessTokenData = await signInUser(email, password);
     req.session.accessToken = accessTokenData.AuthenticationResult.AccessToken;

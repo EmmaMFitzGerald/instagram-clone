@@ -1,4 +1,5 @@
 /* eslint-disable no-plusplus */
+// eslint-disable-next-line import/prefer-default-export
 export function getListFollowers(followers: any): any {
     const listOfFollowers = [];
 

@@ -1,5 +1,5 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Concert+One&display=swap'); */
-
+ 
 * {
     box-sizing: border-box;
     margin: 0%;
@@ -18,38 +18,24 @@ body {
     background-color: #FAEBD7;
 }
 
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 30px 10px;
-}
-
-.logo {
-    cursor: pointer;
-}
-
-.navlinks {
-    list-style: none;
-}
-
-.navlinks li {
-    display: inline-block;
-    padding: 0px 20px;
-}
-
-.navlinks li a {
-    transition: all 0.3s ease 0s;
-}
-
-.navlinks li a:hover {
-    color: #0099a9;
-}
 
 button {
     border: none;
-}
-/* 
+    background-color: #FAEBD7
+} 
+
+nav ul {
+    margin: 0;
+  padding: 0; }
+
+
+nav ul li {
+    width: auto; }
+
+nav ul li a {
+    display: block;
+    width: 100%; }
+
 ul{
     margin: 0;
     padding: 0;
@@ -83,4 +69,4 @@ ul li {
     display: inline-block;
     padding: 20px;
     margin: 0 2vw;
-} */ */
+} 

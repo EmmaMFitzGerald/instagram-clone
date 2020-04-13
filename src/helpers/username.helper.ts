@@ -1,7 +1,9 @@
 import AWS = require("aws-sdk");
 
 // eslint-disable-next-line import/prefer-default-export
-export function createUsername(email: any, name: any, userId: any) {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+// eslint-disable-next-line import/prefer-default-export
+export function addUserToUserTable(email: any, name: any): any {
     const params = {
         Item: {
             userName: name,
