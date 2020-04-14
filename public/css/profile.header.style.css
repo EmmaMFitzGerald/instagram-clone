@@ -4,6 +4,15 @@ body {
     background-color: #E8E9E9;
 }
 
+form {
+    font-family: 'Lilita One', cursive;
+}
+
+form:hover {
+    border-color: #78cfba;
+    color: #3498db;
+}
+
 header {
     background-color: #E9E9E9;
     position: fixed;

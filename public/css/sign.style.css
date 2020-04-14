@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
 .box{
     background: #E8E9E9;
     width:300px;
@@ -73,4 +74,8 @@
  
   a:hover{
     color:#3498db; 
+  }
+
+  input {
+    font-family: 'Lilita One', cursive;;
   }

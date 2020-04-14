@@ -60,10 +60,10 @@ app.post("/delete", (req, res) => {
     res.redirect("back");
 });
 
-app.post("/like", (req, res) => {
+app.post("/like", async (req, res) => {
     const { photoId } = req.body;
     const { userId } = req.body;
-    likePhoto(photoId, userId);
+    await likePhoto(photoId, userId);
     res.redirect("back");
 });
 
@@ -102,7 +102,7 @@ app.post("/followers", async (req, res) => {
 app.get("/explore", async (req, res) => {
     const allPhotos = await getAllPhotos();
     const sortedPhotos = sortPhotosByDate(allPhotos);
-    const likes = getLikes(sortedPhotos);
+    const likes = await getLikes(sortedPhotos);
     const allPhotosSignedURLs = signUrls(sortedPhotos);
     const { userName } = req.session;
     res.render("explore", {

@@ -2,7 +2,7 @@ import AWS = require("aws-sdk");
 // ADDS A PHOTO TO THE DB
 // eslint-disable-next-line import/prefer-default-export
 export async function likePhoto(PhotoID: any, UserID: any): Promise<any> {
-    console.log(PhotoID, UserID)
+    console.log(PhotoID, UserID);
     const params = {
         TableName: "PhotoTable",
         Key: {
@@ -21,6 +21,7 @@ export async function likePhoto(PhotoID: any, UserID: any): Promise<any> {
     });
 
     console.log("Updating the item...");
+    // eslint-disable-next-line func-names
     documentClient.update(params, function(err, data) {
         if (err) {
             console.error(err);

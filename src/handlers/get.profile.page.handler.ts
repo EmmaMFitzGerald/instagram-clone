@@ -3,7 +3,7 @@ import { signUrls } from "../helpers/signed.url.helper";
 import { getListOfPeopleYouFollow } from "../helpers/filter.array.of.following";
 import { queryUsersTable } from "../helpers/get.username.dynamo.helper";
 import { sortPhotosByDate } from "../helpers/sort.photos.helper";
-import { getLikes } from "../helpers/get.likes"
+import { getLikes } from "../helpers/get.likes";
 // eslint-disable-next-line import/prefer-default-export
 export async function getProfilePageHandler(
     arrayOfUsersFollowers: any,

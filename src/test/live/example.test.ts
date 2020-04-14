@@ -1,52 +1,52 @@
-/* eslint-disable func-names */
-import { describe, it } from "mocha";
-import { expect } from "chai";
-import { table } from "console";
-import * as AWS from "aws-sdk";
-import * as fs from "fs";
-import * as path from "path";
-import * as AmazonCognitoIdentity from "amazon-cognito-identity-js";
+// /* eslint-disable func-names */
+// import { describe, it } from "mocha";
+// import { expect } from "chai";
+// import { table } from "console";
+// import * as AWS from "aws-sdk";
+// import * as fs from "fs";
+// import * as path from "path";
+// import * as AmazonCognitoIdentity from "amazon-cognito-identity-js";
 
-describe("Example Test Series", () => {
-    it("should query the likes tabl", () => {
-        const arrayOfLikes = []
-       
-        const arrayOfObjects = [
-            {
-                UserID: "emmamariafitzgerald@gmail.com",
-                PhotoID: "1xnmdjohk8yzag6l",
-                UploadTime: 1586812664685,
-            },
-            {
-                UserID: "emma@gmail.com",
-                PhotoID: "1xnmdl0xk8zs7i22",
-                UploadTime: 1586812664685,
-            },
-        ];
+// describe("Example Test Series", () => {
+//     it("should query the likes tabl", () => {
+//         const arrayOfLikes = [];
 
-        for (let i = 0, l = arrayOfObjects.length; i < l; i++) {
-            const params = {
-                TableName: "LikesTable",
-                FilterExpression: "PhotoID = :PhotoID",
-                ExpressionAttributeValues: {
-                    ":PhotoID": arrayOfObjects[i].PhotoID,
-                },
-            };
+//         const arrayOfObjects = [
+//             {
+//                 UserID: "emmamariafitzgerald@gmail.com",
+//                 PhotoID: "1xnmdjohk8yzag6l",
+//                 UploadTime: 1586812664685,
+//             },
+//             {
+//                 UserID: "emma@gmail.com",
+//                 PhotoID: "1xnmdl0xk8zs7i22",
+//                 UploadTime: 1586812664685,
+//             },
+//         ];
 
-            const documentClient = new AWS.DynamoDB.DocumentClient({
-                region: "us-east-1",
-            });
+//         for (let i = 0, l = arrayOfObjects.length; i < l; i++) {
+//             const params = {
+//                 TableName: "LikesTable",
+//                 FilterExpression: "PhotoID = :PhotoID",
+//                 ExpressionAttributeValues: {
+//                     ":PhotoID": arrayOfObjects[i].PhotoID,
+//                 },
+//             };
 
-            documentClient.scan(params, function(err: any, data: any) {
-                if (err) {
-                    console.error("Unable to get item", console.log(err));
-                } else {
-                    console.log(data);
-                }
-            });
-        }
-    });
-});
+//             const documentClient = new AWS.DynamoDB.DocumentClient({
+//                 region: "us-east-1",
+//             });
+
+//             documentClient.scan(params, function(err: any, data: any) {
+//                 if (err) {
+//                     console.error("Unable to get item", console.log(err));
+//                 } else {
+//                     console.log(data);
+//                 }
+//             });
+//         }
+//     });
+// });
 
 //     it("should query userstable for list of following", done => {
 //         const params = {
