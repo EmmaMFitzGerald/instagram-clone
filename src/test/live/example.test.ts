@@ -1,20 +1,38 @@
 /* eslint-disable func-names */
-// import { describe, it } from "mocha";
-// import { expect } from "chai";
-// // import { table } from "console";
-// import * as AWS from "aws-sdk";
-// import * as fs from "fs";
-// import * as path from "path";
-// import * as AmazonCognitoIdentity from "amazon-cognito-identity-js";
+import { describe, it } from "mocha";
+import { expect } from "chai";
+import { table } from "console";
+import * as AWS from "aws-sdk";
+import * as fs from "fs";
+import * as path from "path";
+import * as AmazonCognitoIdentity from "amazon-cognito-identity-js";
 
-// describe("Example Test Series", () => {
-// it("should return an expected value", () => {
-//     const x = 1;
-//     const y = 10;
-//     const target = x + y;
-
-//     expect(target).to.equal(11);
-// });
+describe("Example Test Series", () => {
+    it("should query the likes tabl", () => {
+        const params = {
+                        TableName: "LikesTable",
+                        FilterExpression: "PhotoID = :PhotoID",
+                        ExpressionAttributeValues: {
+                            ":PhotoID": "1xnmdjohk8yz9fnn",
+                        },
+                    };
+            
+                    const documentClient = new AWS.DynamoDB.DocumentClient({
+                        region: "us-east-1",
+                    });
+            
+                    documentClient.scan(params, function(err: any, data: any) {
+                        if (err) {
+                            console.error(
+                                "Unable to get item",
+                                console.log(err)
+                            );
+                        } else {
+                console.log(data);
+                        }
+                    });
+    });
+});
 
 //     it("should query userstable for list of following", done => {
 //         const params = {

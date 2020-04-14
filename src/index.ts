@@ -71,6 +71,7 @@ app.post("/following", async (req, res) => {
     const listOfPeopleYouFollow = getListOfPeopleYouFollow(peopleYouFollow);
     const list = await getUsersYouFollowsPhotos(listOfPeopleYouFollow);
     const array = getArrayOfPhotos(list);
+    console.log("array", array);
     const listOfSignedUrls = signUrls(array);
     res.render("peopleYouFollow", {
         listOfSignedUrls,
