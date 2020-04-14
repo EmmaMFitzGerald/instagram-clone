@@ -9,7 +9,8 @@ export async function uploadPhoto(
     name: any,
     userId: any,
     bucketName: any,
-    pathname: any
+    pathname: any,
+    likes: any
 ): Promise<any> {
     // use dyanmo make the db record
     try {
@@ -20,7 +21,8 @@ export async function uploadPhoto(
             name,
             userId,
             bucketName,
-            pathname
+            pathname,
+            likes
         );
     } catch (err) {
         console.error("this is the dynamo error:", err);

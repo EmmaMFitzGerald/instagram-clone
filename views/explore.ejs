@@ -6,11 +6,18 @@
     <% for (var i = 0; i < allPhotosSignedURLs.length; i++) { %>
         <div class="displayImages">
             <div class="images">
-                <a href="/profile/<%= allPhotos.Items[i].Name %>">
-                <img src="<%= allPhotosSignedURLs[i] %>" alt="" height="200px" width="200px">
-            </a>
+                <a class="userName" href="/profile/<%= allPhotos.Items[i].Name %>">
+                    <img src="<%= allPhotosSignedURLs[i] %>" alt="" height="200px" width="200px">
+                </a>
             </div>
-            <p class="displayUsername"><a href="/profile/<%= allPhotos.Items[i].Name %>"><%= allPhotos.Items[i].Name %></a></p>
+            <div class="likes">
+                <form class="likeButton" method="post" action="/like">
+                    <input type="hidden" name="photoId" value="<%=sortedPhotos[i].PhotoID%>">
+                    <input type="hidden" name="userId" value="<%= sortedPhotos[i].UserID %>">
+                    <input type="submit" value="<%= likes[i] %> ♥">
+                </form>
+                <p class="displayUsername"><a href="/profile/<%= allPhotos.Items[i].Name %>"><%= allPhotos.Items[i].Name %></a></p>
+            </div>
         </div>
     <% } %>
 </body>

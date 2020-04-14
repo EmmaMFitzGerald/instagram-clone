@@ -25,6 +25,8 @@ import { getProfilePageHandler } from "./handlers/get.profile.page.handler";
 import { sortPhotosByDate } from "./helpers/sort.photos.helper";
 import { getArrayOfPhotos } from "./helpers/get.array.of.photo.info";
 import { getListOfFollowing } from "./helpers/get.list.of.people.you.follow";
+import { likePhoto } from "./helpers/like.photo";
+import { getLikes } from "./helpers/get.likes";
 // import methodOverride = require("method-override");
 const app = express();
 app.use(express.static(`${__dirname}/public`));
@@ -37,7 +39,6 @@ const staticDir = path.join(__dirname, "../public");
 console.log(`Static direction is: ${staticDir}`);
 app.use(express.static(staticDir));
 app.use(session({ secret: "sessionsecret" }));
-
 
 import multer = require("multer");
 const upload = multer({ dest: "uploads/" });
@@ -56,6 +57,13 @@ app.get("/signin", (req, res) => {
 
 app.post("/delete", (req, res) => {
     deletePhotoHelper(req.body.photoId, req.session.userId);
+    res.redirect("back");
+});
+
+app.post("/like", (req, res) => {
+    const { photoId } = req.body;
+    const { userId } = req.body;
+    likePhoto(photoId, userId);
     res.redirect("back");
 });
 
@@ -94,9 +102,12 @@ app.post("/followers", async (req, res) => {
 app.get("/explore", async (req, res) => {
     const allPhotos = await getAllPhotos();
     const sortedPhotos = sortPhotosByDate(allPhotos);
+    const likes = getLikes(sortedPhotos);
     const allPhotosSignedURLs = signUrls(sortedPhotos);
     const { userName } = req.session;
     res.render("explore", {
+        sortedPhotos,
+        likes,
         allPhotosSignedURLs,
         allPhotos,
         userName,
@@ -115,18 +126,15 @@ app.get("/profile/:id", async (req, res) => {
 
     const listOfUsersFollowers = await getListOfFollowers(id);
     const arrayOfUsersFollowers = getArrayOfFollowers(listOfUsersFollowers);
-    console.log("array of users followers", arrayOfUsersFollowers);
 
     const listOfFollowing = await getListOfFollowing(id);
     const peopleYouFollow = listOfFollowing.Items;
     const listOfPeopleYouFollow = getListOfPeopleYouFollow(peopleYouFollow);
-    console.log("list of people user follows", listOfPeopleYouFollow)
 
     const { userName } = req.session;
     const arrayOfAllUsers = getArrayOfAllUsers(allUsers);
     const doesThisUserExist = arrayOfAllUsers.includes(id);
     const email = req.session.userId;
-    console.log("email", email);
     await getProfilePageHandler(
         arrayOfUsersFollowers,
         listOfPeopleYouFollow,
@@ -182,6 +190,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
     const bucketName = "instagram-clone-bucket-emma";
     const name = req.body.currentUser;
     const { userId } = req.session;
+    const likes = 0;
     await uploadPhoto(
         originalname,
         photoId,
@@ -189,7 +198,8 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         name,
         userId,
         bucketName,
-        pathname
+        pathname,
+        likes
     );
     res.redirect("back");
 });

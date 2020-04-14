@@ -10,6 +10,12 @@
                 <div class="images">
                     <img src="<%= usersSignedURLs[i] %>" alt="" height="200px" width="200px">
                 </div>
+                <form class="likeButton" method="post" action="/like">
+                    <input type="hidden" name="photoId" value="<%=sortedPhotos[i].PhotoID%>">
+                    <input type="hidden" name="userId" value="<%= sortedPhotos[i].UserID %>">
+                    <input type="submit" value="<%= likes[i] %> ♥">
+                </form>
+            </div>
         </div>
         <% } %>
     <% } %>

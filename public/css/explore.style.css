@@ -9,6 +9,11 @@ body {
     display: inline-block;
 }
 
+.likes {
+    display: inline-block;
+    margin-left: 140px;
+}
+
 .followers {
     margin-left: 30px;
     margin-top: 15px;
@@ -41,6 +46,11 @@ a {
     color: #000040;
     font-size: medium;
 }
+
+input[type="submit"]:hover{
+    color :#78cfba; 
+ }
+
 
 a:hover {
     color: #3498db;

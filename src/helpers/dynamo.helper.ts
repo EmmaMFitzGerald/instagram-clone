@@ -8,7 +8,8 @@ export function dynamoHelper(
     name: string,
     userName: string,
     bucketName: string,
-    pathname: string
+    pathname: string,
+    likes: any
 ): Promise<any> {
     const params = {
         Item: {
@@ -19,6 +20,7 @@ export function dynamoHelper(
             UploadTime: uploadTime,
             BucketName: bucketName,
             PathName: pathname,
+            likes,
         },
         TableName: "PhotoTable",
     };

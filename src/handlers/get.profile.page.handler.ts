@@ -3,6 +3,7 @@ import { signUrls } from "../helpers/signed.url.helper";
 import { getListOfPeopleYouFollow } from "../helpers/filter.array.of.following";
 import { queryUsersTable } from "../helpers/get.username.dynamo.helper";
 import { sortPhotosByDate } from "../helpers/sort.photos.helper";
+import { getLikes } from "../helpers/get.likes"
 // eslint-disable-next-line import/prefer-default-export
 export async function getProfilePageHandler(
     arrayOfUsersFollowers: any,
@@ -37,13 +38,14 @@ export async function getProfilePageHandler(
         );
         const specificUsersPhotos = await getUsersPhoto(id);
         const sortedPhotos = sortPhotosByDate(specificUsersPhotos);
-        console.log("sorted photos:", sortedPhotos);
+        const likes = getLikes(sortedPhotos);
         const usersSignedURLs = signUrls(sortedPhotos);
-        // const usersSignedURLs = signUrls(specificUsersPhotos.Items);
         res.render("specificProfile", {
             specificUsersPhotos,
+            likes,
             id,
             usersSignedURLs,
+            sortedPhotos,
             userName,
             doesCurrentUserFollowThisProfile,
             arrayOfUsersFollowers,
