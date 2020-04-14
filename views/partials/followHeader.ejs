@@ -11,7 +11,7 @@
                 <% if (userName) { %>
                 <li><a href="/profile/<%=userName%>"><%= userName %></a>'s Profile</li>
                 <li><form method="post" action="/search">
-                  <input type="text" placeholder="Search for Users" name="search">
+                  <input type="text" placeholder="Search for Users" name="search" required>
                   <button type="submit"><i class="fa fa-search"></i></button>
                 </form></li>
                 <li><a href="/explore">Explore</a></li>
